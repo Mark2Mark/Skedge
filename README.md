@@ -31,11 +31,11 @@ You find help and code examples at the [Glyphs Documentation](https://docu.glyph
 
 ##### TODO
 
-- Display change of file in Window Title (Completeley different file handling).
-- Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later.
-  - for instance calling some variables and functions `global`
-- Provide some code snippets.
-- Sophisticated syntax highlighting.
+1. Display change of file in Window Title (Completeley different file handling).
+2. Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later.
+ i. for instance calling some variables and functions `global`
+3. Provide some code snippets.
+4. Sophisticated syntax highlighting.
 
 ##### Pull Requests
 
