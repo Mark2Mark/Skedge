@@ -15,7 +15,9 @@ as well as at the [Glyphs Devolper Kit (SDK)](https://github.com/schriftgestalt/
 
 ### Examples
 
-- 
+<p align="center"> 
+<img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge%20Screenshot%201.png" alt="Skedge" height="400px">
+</p> 
 
 ##### Known Issues
 
