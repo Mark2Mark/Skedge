@@ -38,8 +38,8 @@ Feel free to comment or pull requests for any improvements.
 
 Copyright 2017 [Mark Frömberg](http://www.markfromberg.com/) *@Mark2Mark*
 
-Made possible with the GlyphsSDK by Georg Seifert (@schriftgestalt) and Rainer Erich Scheichelbauer (@mekkablue).
-Thanks to Georg Seifert (@schriftgestalt) for streamlining and helping to make this tool still work after a lot of recent API cahnges!
+Made possible with the GlyphsSDK by Georg Seifert (@schriftgestalt) and Rainer Erich Scheichelbauer [@mekkablue](https://github.com/mekkablue).
+Thanks to Georg Seifert [@schriftgestalt](https://github.com/schriftgestalt) for streamlining and helping to make this tool still work after a lot of recent API cahnges!
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
