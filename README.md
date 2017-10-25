@@ -10,7 +10,7 @@ You will get immediate feedback of your code, which isn’t the case if you deve
 
 Just open `Skedge` from the Window menu. It will present you a super simple sample code to begin with.
 
-You find a lot of help at the [Glyphs Documentation](https://docu.glyphsapp.com/) as well as at the [Glyphs Devolper Kit (SDK)](https://github.com/schriftgestalt/GlyphsSDK)
+You find help and code examples at the [Glyphs Documentation](https://docu.glyphsapp.com/) as well as at the [Glyphs Devolper Kit (SDK)](https://github.com/schriftgestalt/GlyphsSDK). It’s also always possible to peek into public reporter plugins like [the ones from me](https://github.com/Mark2Mark/Glyphsapp-Plugins), or from [@mekkablue](https://github.com/mekkablue) and other people who are endlessly kind to share their skills with the world. :)
 
 ### Examples
 
@@ -27,6 +27,7 @@ You find a lot of help at the [Glyphs Documentation](https://docu.glyphsapp.com/
 ##### TODO
 
 - Display change of file in Window Title (Completeley different file handling).
+- Provide some code snippets.
 - Sophisticated syntax highlighting.
 
 ##### Pull Requests
