@@ -8,7 +8,12 @@ You will get *immediate feedback* of your code, which isn’t the case if you de
 
 ### How to use
 
-Just open `Skedge` from the Window menu. It will present you a super simple sample code to begin with.
+- Open `Skedge` from the Window menu. It will present you a super simple sample code to begin with.
+- You can open and save your code for later. Just hit `Cmd+S` or `Cmd+O`.
+- `Cmd+P`lets you print your code or save it as PDF.
+- Switch the checkbox `Live` off, if you don’t want to see changes in realtime.
+- If so, be sure to hit the `Run` button (or `Cmd+R`) to run your code.
+- `Cmd+K` resets the drawing in your Edit Tab. The same happens when you close the window.
 
 You find help and code examples at the [Glyphs Documentation](https://docu.glyphsapp.com/) as well as at the [Glyphs Devolper Kit (SDK)](https://github.com/schriftgestalt/GlyphsSDK). It’s also always possible to peek into public reporter plugins like [the ones from me](https://github.com/Mark2Mark/Glyphsapp-Plugins), or from [@mekkablue](https://github.com/mekkablue) and other people who are endlessly kind to share their skills with the world. :)
 
@@ -27,6 +32,8 @@ You find help and code examples at the [Glyphs Documentation](https://docu.glyph
 ##### TODO
 
 - Display change of file in Window Title (Completeley different file handling).
+- Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later.
+  - for instance calling some variables and functions `global`
 - Provide some code snippets.
 - Sophisticated syntax highlighting.
 
