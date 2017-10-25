@@ -10,8 +10,7 @@ You will get immediate feedback of your code, which isn’t the case if you deve
 
 Just open `Skedge` from the Window menu. It will present you a super simple sample code to begin with.
 
-You find a lot of help at the [Glyphs Documentation](https://docu.glyphsapp.com/) *Glyphs Documentation*
-as well as at the [Glyphs Devolper Kit (SDK)](https://github.com/schriftgestalt/GlyphsSDK) *Glyphs Devolper Kit (SDK)*
+You find a lot of help at the [Glyphs Documentation](https://docu.glyphsapp.com/) as well as at the [Glyphs Devolper Kit (SDK)](https://github.com/schriftgestalt/GlyphsSDK)
 
 ### Examples
 
