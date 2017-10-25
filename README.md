@@ -4,7 +4,7 @@
 
 Skedge enables you to draw any graphics via python code live into the view of an Edit Tab in Glyphs.
 As the name implies, it aims to help you sketching out ideas.
-You will get immediate feedback of your code, which isn’t the case if you develop a reporter Plugin. Therefore you would have to restart Glyphs for each and every change you make just to see those changes happen. Not anymore!
+You will get *immediate feedback* of your code, which isn’t the case if you develop a reporter Plugin. Normally you’d have to restart Glyphs for each and every change to see changes happen. **Not anymore!**
 
 ### How to use
 
