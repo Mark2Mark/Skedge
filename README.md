@@ -5,10 +5,10 @@ This is a plugin for the [Glyphs font editor](http://glyphsapp.com/).
 
 👉 Have you ever wanted to make a <a name="myfootnote1">reporter<sup>1</sup></a> plugin for Glyphs, but the developer kit and the plugin file structure looks too intimidating to you?
 👉 Maybe you’re never willing to get your head around it and skip developing even though you have great ideas you’d love to just sketch out.
-👉 Or do you create plugins from time to time, but you’re annoyed that you have to restart Glyphs for every change? This can take a loooot of time, especially when the plugin is packed with formulas and algorithms.
+👉 Or do you create plugins from time to time, but you’re annoyed that you have to restart Glyphs for every change? This can take a loooot of time, especially when the plugin is packed with formulas and algorithms that you need to get straight. I suck at math, hence my approach ist often the trial-and-error.
 👉 You want to see immediately which numbers and operators have which effect. You want to properly position your to be displayed components, maybe design them to provide an optimal user experience. Or choose the best colors for your graphics.
 
-🎉 *Well, wait no longer! “Skedge” let’s you do exactly this!* 🎉
+#### 🎉 *Well, wait no longer! “Skedge” let’s you do exactly this!* 🎉
 
 🤓 “Skedge” lets you focus on the essence of code you need in order to get your idea to the canvas. No file and folder overload. No extra code that you don’t understand the use for. No Glyphs restart for every change you make.
 
@@ -164,6 +164,7 @@ for path in layer.paths:
 ---
 ##### Known Issues
 
+- The code in “Skedge” can be almost exactly transferred into the e.g. `drawBackground()` method of your actual reporter plugin. Don’t forget to add the `self.` where needed, though. “Skedge” is build to not need it, so watch out for these.
 - Some people report a crash caused by scrolling in the Code Editor. I cannot reproduce yet, so I’ll need Console Logs.
 - Some Plugins which add a DRAWBACKGROUND callback could interfere with this plugin and hence either or both fail to operate.
 - Syntax Highlighting is yet very rudimentary. But waaay better than none.
