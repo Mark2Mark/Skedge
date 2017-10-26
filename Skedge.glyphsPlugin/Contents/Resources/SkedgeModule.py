@@ -58,23 +58,20 @@ import traceback
 scale = Glyphs.font.currentTab.scale
 # layer = Glyphs.font.glyphs[0].layers[0]
 
-try:
-	NSColor.greenColor().colorWithAlphaComponent_(0.5).set()
-	layer.bezierPath.fill()
-except:
-	print traceback.format_exc()
+def badge(x, y, s):
+	path = NSBezierPath.alloc().init()
+	rect = NSRect( (x-s/2, y-s/2), (s, s) )
+	ovalInRect = NSBezierPath.bezierPathWithOvalInRect_( rect )
+	path.appendBezierPath_( ovalInRect )
+	NSColor.colorWithCalibratedRed_green_blue_alpha_( 1, .2, 0, .5 ).set()
+	path.fill()
 
-def badge(x, y, size):
-	myPath = NSBezierPath.alloc().init()
-	myRect = NSRect( ( x-size / 2, y-size / 2 ), ( size, size ) )
-	thisPath = NSBezierPath.bezierPathWithOvalInRect_( myRect )
-	myPath.appendBezierPath_( thisPath )
-	NSColor.colorWithCalibratedRed_green_blue_alpha_( 1, .2, 0, .65 ).set()
-	myPath.fill()
+NSColor.greenColor().colorWithAlphaComponent_(0.3).set()
+layer.bezierPath.fill()
 
 for path in layer.paths:
 	for node in path.nodes:
-		badge(node.x, node.y, 42 / scale )
+		badge(node.x, node.y, 15 / scale )
 """
 
 
