@@ -122,24 +122,24 @@ global layer, scale, drawLine ## Skedge-Hack
 
 scale = Glyphs.font.currentTab.scale
 layer = Glyphs.font.selectedLayers[0]
-NSColor.redColor().set()
+NSColor.blueColor().set()
 
 
-def drawLine(x1, y1, x2, y2):
+def drawLine((x1, y1), (x2, y2)):
 	strokeWidth = 1/scale
 	path = NSBezierPath.bezierPath()
 	path.moveToPoint_((x1, y1))
 	path.lineToPoint_((x2, y2))
 	path.setLineWidth_(strokeWidth)
-	path.setLineDash_count_phase_((2, 2), 2, 0.0)
+	path.setLineDash_count_phase_((10, 2), 2, 0.0)
 	path.stroke()
 
 def DrawCross((x, y), (width, height)):
 	### BOUNDS DIMENSIONS
-	centerX = (x + width/2)
 	xRight = x + width
-	centerY = (y + height/2)
 	yTop = y + height
+	xCenter = (x + width/2)
+	yCenter = (y + height/2)
 
 	### LAYER/METRIC DIMENSIONS
 	left = 0
@@ -147,8 +147,8 @@ def DrawCross((x, y), (width, height)):
 	ascender = layer.glyphMetrics()[1]
 	descender = layer.glyphMetrics()[3]
 
-	drawLine( left, centerY, right, centerY)
-	drawLine( centerX, descender, centerX, ascender )
+	drawLine((left, yCenter), (right, yCenter))
+	drawLine((xCenter, descender), (xCenter, ascender))
 
 
 for path in layer.paths:
