@@ -159,7 +159,7 @@ for path in layer.paths:
 
 
 <p align="center"> 
-<img src="https://gfycat.com/gifs/detail/MeanVeneratedGangesdolphin" alt="Skedge" height="400px">
+<img src="https://gfycat.com/ifr/MeanVeneratedGangesdolphin" alt="Skedge" height="400px">
 <img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge%20Screenshot%201.png" alt="Skedge" height="400px">
 </p> 
 
