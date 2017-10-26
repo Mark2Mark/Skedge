@@ -106,6 +106,7 @@ u"in ",
 u"from ",
 u"print ",
 u"except ",
+u"global ",
 u"as ",
 u"\+ ", # Not working
 u"- ",
