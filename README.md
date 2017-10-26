@@ -156,6 +156,8 @@ for path in layer.paths:
 ---
 ### Examples
 
+<iframe src='https://gfycat.com/ifr/MeanVeneratedGangesdolphin' frameborder='0' scrolling='no' width='1096' height='720' allowfullscreen></iframe>
+
 <p align="center"> 
 <img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge%20Screenshot%201.png" alt="Skedge" height="400px">
 </p> 
