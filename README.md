@@ -53,6 +53,109 @@ and other people who are endlessly kind to share their skills with the world. :)
 <img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge%20Screenshot%201.png" alt="Skedge" height="400px">
 </p> 
 
+
+### Sample Codes
+
+You can dump these snippets right into “Skedge” and they will (hopefully) just do what they claim to do:
+
+##### 01)
+```
+###################
+# Draw Layer Bounds
+###################
+from AppKit import NSRectFill, NSRect, NSMakeRect
+
+NSColor.yellowColor().set()
+
+bounds = layer.bounds
+x = bounds.origin.x
+y = bounds.origin.y
+width = bounds.size.width
+height = bounds.size.height
+
+rect = NSMakeRect(x, y, width, height)
+NSRectFill(rect)
+```
+
+##### 02)
+```
+###################################################################
+# Draw filled Path with red outline and highlight every second Node
+###################################################################
+import traceback
+
+scale = Glyphs.font.currentTab.scale
+
+def badge(x, y, size):
+	myPath = NSBezierPath.alloc().init()
+	myRect = NSRect( ( x-size/2, y-size/2 ), ( size, size ) )
+	thisPath = NSBezierPath.bezierPathWithOvalInRect_( myRect )
+	myPath.appendBezierPath_( thisPath )
+	NSColor.colorWithCalibratedRed_green_blue_alpha_( 0.5, .5, 0.5, .3 ).set()
+	myPath.fill()
+
+for path in layer.paths:
+	NSColor.grayColor().colorWithAlphaComponent_(0.3).set()
+	bp = path.bezierPath
+	bp.fill()
+	bp.setLineWidth_(5/scale)
+	NSColor.redColor().set()	
+	bp.stroke()
+	for i, node in enumerate(path.nodes):
+		if i % 2:
+			badge(node.x, node.y, 20/scale )
+```
+
+##### 03)
+```
+#################################################
+# Draw plumblines at each path’s center (x and y)
+#################################################
+import traceback
+
+global layer, scale, drawLine ## Skedge-Hack
+
+scale = Glyphs.font.currentTab.scale
+layer = Glyphs.font.selectedLayers[0]
+NSColor.redColor().set()
+
+def BoundsRect(NSRect):
+	x, y = NSRect[0]
+	width, height = NSRect[1]
+	return x, y, width, height
+
+def drawLine(x1, y1, x2, y2):
+	strokeWidth = 1/scale
+	myPath = NSBezierPath.bezierPath()
+	myPath.moveToPoint_((x1, y1))
+	myPath.lineToPoint_((x2, y2))
+	myPath.setLineWidth_(strokeWidth)
+	myPath.setLineDash_count_phase_((2, 2), 2, 0.0)
+	myPath.stroke()
+
+def DrawCross(x, y, width, height):
+	xHeight = layer.glyphMetrics()[4]
+
+	### BOUNDS DIMENSIONS
+	xCenter = (x + width/2)
+	xRight = x + width
+	yCenter = (y + height/2)
+	yTop = y + height
+
+	### LAYER/METRIC DIMENSIONS
+	xLayerLeft = 0
+	xLayerRight = layer.width
+	yAscender = layer.glyphMetrics()[1]
+	yDescender = layer.glyphMetrics()[3]
+
+	drawLine( xLayerLeft, yCenter, xLayerRight, yCenter)
+	drawLine( xCenter, yDescender, xCenter, yAscender )
+
+for path in layer.paths:
+	DrawCross(*BoundsRect(path.bounds))
+```
+
+
 ##### Known Issues
 
 - Some people report a crash caused by scrolling in the Code Editor. I cannot reproduce yet, so I’ll need Console Logs.
