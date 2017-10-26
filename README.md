@@ -24,6 +24,13 @@ But this tool will help you anytime, no matter if you just started with python o
 A plugin which draws something to your active Edit Tab
 
 ---
+### Example
+
+<p align="center"> 
+<img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge%201%20-%20Plumblines%20720.gif?raw=true" alt="Skedge" height="">
+</p> 
+
+---
 ### How to use
 
 - (Install once from the Plugin Manager in Glyphs.)
@@ -152,16 +159,6 @@ def DrawCross(x, y, width, height):
 for path in layer.paths:
 	DrawCross(*BoundsRect(path.bounds))
 ```
-
----
-### Examples
-
-
-
-<p align="center"> 
-<img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge%201%20-%20Plumblines%20720.gif?raw=true" alt="Skedge" height="">
-</p> 
-
 
 ---
 ##### Known Issues
