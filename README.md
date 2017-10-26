@@ -124,40 +124,35 @@ scale = Glyphs.font.currentTab.scale
 layer = Glyphs.font.selectedLayers[0]
 NSColor.redColor().set()
 
-def BoundsRect(NSRect):
-	x, y = NSRect[0]
-	width, height = NSRect[1]
-	return x, y, width, height
 
 def drawLine(x1, y1, x2, y2):
 	strokeWidth = 1/scale
-	myPath = NSBezierPath.bezierPath()
-	myPath.moveToPoint_((x1, y1))
-	myPath.lineToPoint_((x2, y2))
-	myPath.setLineWidth_(strokeWidth)
-	myPath.setLineDash_count_phase_((2, 2), 2, 0.0)
-	myPath.stroke()
+	path = NSBezierPath.bezierPath()
+	path.moveToPoint_((x1, y1))
+	path.lineToPoint_((x2, y2))
+	path.setLineWidth_(strokeWidth)
+	path.setLineDash_count_phase_((2, 2), 2, 0.0)
+	path.stroke()
 
-def DrawCross(x, y, width, height):
-	xHeight = layer.glyphMetrics()[4]
-
+def DrawCross((x, y), (width, height)):
 	### BOUNDS DIMENSIONS
-	xCenter = (x + width/2)
+	centerX = (x + width/2)
 	xRight = x + width
-	yCenter = (y + height/2)
+	centerY = (y + height/2)
 	yTop = y + height
 
 	### LAYER/METRIC DIMENSIONS
-	xLayerLeft = 0
-	xLayerRight = layer.width
-	yAscender = layer.glyphMetrics()[1]
-	yDescender = layer.glyphMetrics()[3]
+	left = 0
+	right = layer.width
+	ascender = layer.glyphMetrics()[1]
+	descender = layer.glyphMetrics()[3]
 
-	drawLine( xLayerLeft, yCenter, xLayerRight, yCenter)
-	drawLine( xCenter, yDescender, xCenter, yAscender )
+	drawLine( left, centerY, right, centerY)
+	drawLine( centerX, descender, centerX, ascender )
+
 
 for path in layer.paths:
-	DrawCross(*BoundsRect(path.bounds))
+	DrawCross(*[p for p in path.bounds])
 ```
 
 ---
