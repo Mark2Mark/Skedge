@@ -23,8 +23,7 @@ But this tool will help you anytime, no matter if you just started with python o
 <sup>[1)](#myfootnote1)</sup>
 A plugin which draws something to your active Edit Tab
 
-
-
+---
 ### How to use
 
 - (Install once from the Plugin Manager in Glyphs.)
@@ -35,6 +34,7 @@ A plugin which draws something to your active Edit Tab
 - `Cmd+K` resets the drawing in your Edit Tab. The same happens when you close the window.
 - `Cmd+P` lets you print your code or save it as PDF.
 
+---
 ### Help
 
 You find **help** and **code examples** here:
@@ -47,13 +47,7 @@ It’s also always possible to peek into public plugins:
 
 and other people who are endlessly kind to share their skills with the world. :)
 
-### Examples
-
-<p align="center"> 
-<img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge%20Screenshot%201.png" alt="Skedge" height="400px">
-</p> 
-
-
+---
 ### Sample Codes
 
 You can dump these snippets right into “Skedge” and they will (hopefully) just do what they claim to do:
@@ -155,13 +149,22 @@ for path in layer.paths:
 	DrawCross(*BoundsRect(path.bounds))
 ```
 
+---
+### Examples
 
+<p align="center"> 
+<img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge%20Screenshot%201.png" alt="Skedge" height="400px">
+</p> 
+
+
+---
 ##### Known Issues
 
 - Some people report a crash caused by scrolling in the Code Editor. I cannot reproduce yet, so I’ll need Console Logs.
 - Some Plugins which add a DRAWBACKGROUND callback could interfere with this plugin and hence either or both fail to operate.
 - Syntax Highlighting is yet very rudimentary. But waaay better than none.
 
+---
 ##### TODO
 
 - Display change of file in Window Title (Completeley different file handling).
@@ -174,10 +177,12 @@ for path in layer.paths:
 
 - Sophisticated syntax highlighting.
 
+---
 ##### Pull Requests
 
 Feel free to comment or pull requests for any improvements.
 
+---
 ##### License
 
 Copyright 2017 [Mark Frömberg](http://www.markfromberg.com/) *@Mark2Mark*
