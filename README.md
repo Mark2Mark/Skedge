@@ -38,12 +38,16 @@ A plugin which draws something to your active Edit Tab
 ### Help
 
 You find **help** and **code examples** here:
-- [Glyphs Documentation](https://docu.glyphsapp.com/)
-- [Glyphs Devolper Kit (SDK)](https://github.com/schriftgestalt/GlyphsSDK)
+
+👉 [Glyphs Documentation](https://docu.glyphsapp.com/)
+
+👉 [Glyphs Devolper Kit (SDK)](https://github.com/schriftgestalt/GlyphsSDK)
 
 It’s also always possible to peek into public plugins:
-- [my plugins](https://github.com/Mark2Mark/Glyphsapp-Plugins)
-- [@mekkablue’s plugins](https://github.com/mekkablue)
+
+👉 [my plugins](https://github.com/Mark2Mark/Glyphsapp-Plugins)
+
+👉 [@mekkablue’s plugins](https://github.com/mekkablue)
 
 and other people who are endlessly kind to share their skills with the world. :)
 
@@ -168,13 +172,8 @@ for path in layer.paths:
 ##### TODO
 
 - Display change of file in Window Title (Completeley different file handling).
-
-- Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later.
-
-    * for instance calling some variables and functions `global`
-
+- Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later. (For instance calling some variables and functions `global`)
 - Provide some code snippets.
-
 - Sophisticated syntax highlighting.
 
 ---
