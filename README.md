@@ -3,7 +3,7 @@
 This is a plugin for the [Glyphs font editor](http://glyphsapp.com/).
 
 
-👉 Have you ever wanted to make a <a name="myfootnote1">reporter</a> plugin for Glyphs, but the developer kit and the plugin file structure looks too intimidating to you?
+👉 Have you ever wanted to make a <a name="myfootnote1">reporter<sup>[1)]</sup></a> plugin for Glyphs, but the developer kit and the plugin file structure looks too intimidating to you?
 👉 Maybe you’re never willing to get your head around it and skip developing even though you have great ideas you’d love to just sketch out.
 👉 Or do you create plugins from time to time, but you’re annoyed that you have to restart Glyphs for every change? This can take a loooot of time, especially when the plugin is packed with formulas and algorithms.
 👉 You want to see immediately which numbers and operators have which effect. You want to properly position your to be displayed components, maybe design them to provide an optimal user experience. Or choose the best colors for your graphics.
