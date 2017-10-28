@@ -24,6 +24,8 @@ from AppKit import NSBezierPath,\
 	NSRoundRectBezelStyle,\
 	NSRecessedBezelStyle,\
 	NSShadowlessSquareBezelStyle,\
+	NSNotificationCenter,\
+	NSTextStorageDidProcessEditingNotification,\
 	NSDisclosureBezelStyle,\
 	NSTexturedRoundedBezelStyle,\
 	NSWorkspace,\
@@ -45,7 +47,7 @@ author = u"Mark Frömberg"
 year = "2016"
 version = "1.2"
 releaseDate = "2017-10-25"
-versionDate = "2017-10-25"
+versionDate = "2017-10-29"
 
 
 #================
@@ -176,6 +178,7 @@ class CodeEditor(NSResponder):
 		self.textView.setUsesFindBar_( True )
 		self.textView.setTextContainerInset_( ((10, 15)) )
 
+
 		# Buttons
 		#--------
 		self.w.liveCode = CheckBox((10, -32, 80, 22), "Live", value=True)
@@ -230,11 +233,17 @@ class CodeEditor(NSResponder):
 
 	def drawCode(self, layer, info):
 		if self.code is not None:
-			exec self.code
+			try:
+				exec self.code
+				Glyphs.clearLog()
+			except:
+				## This is the actual Code Log
+				## TODO: pass into own log window.
+				self.skedgeLog() # print traceback.format_exc()
 		
 	def run(self, sender):
 		self.code = self.w.textEditor.get()
-		self.syntaxHighlighter()		
+		self.syntaxHighlighter()
 		Glyphs.redraw()
 
 	def reset(self, sender):
@@ -250,7 +259,11 @@ class CodeEditor(NSResponder):
 			try:
 				self.run(sender)
 			except:
-				print traceback.format_exc()
+				self.skedgeLog() # print traceback.format_exc()
+
+	def skedgeLog(self):
+		Glyphs.clearLog()
+		print traceback.format_exc()
 
 	def performClick(self):
 		self.w.runButton.getNSButton().performClick_(self.w.runButton.getNSButton())
@@ -353,7 +366,9 @@ class CodeEditor(NSResponder):
 				s, e, color = rng
 				self.textView.setTextColor_range_(color, NSMakeRange(s, e))
 		except:
-			print traceback.format_exc()
+			self.skedgeLog() # print traceback.format_exc()
+			# console.log( traceback.format_exc() )
+			
 
 	#======================
 	# O P E N   &   S A V E
@@ -378,7 +393,7 @@ class CodeEditor(NSResponder):
 					self.w.setTitle("%s %s     [%s]" % (name, version, self.openFilePath.lastPathComponent()))
 				except: pass
 			except:
-				print traceback.format_exc()
+				self.skedgeLog()
 
 	def saveFile(self, sender):
 		panel = NSSavePanel.savePanel()
