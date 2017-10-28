@@ -171,6 +171,7 @@ for path in layer.paths:
 - Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later. (For instance calling some variables and functions `global`)
 - Provide some code snippets.
 - Sophisticated syntax highlighting.
+- Add liscence to Repo.
 
 ---
 ##### Pull Requests
