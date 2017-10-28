@@ -40,6 +40,7 @@ A plugin which draws something to your active Edit Tab
 - If so, be sure to hit the “Run” button (or `Cmd+R` ) to run your code.
 - `Cmd+K` resets the drawing in your Edit Tab. The same happens when you close the window.
 - `Cmd+P` lets you print your code or save it as PDF.
+- Python etiquette: please use `TABS`! I’m not trying to force you into that classic battle, I just didn’t prepare the tool to deal with `SPACES` yet. Bear with me. BTW: f***k spaces! :D 
 
 ---
 ### Help
