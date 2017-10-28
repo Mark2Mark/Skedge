@@ -65,7 +65,7 @@ and other people who are endlessly kind to share their skills with the world. :)
 You can dump these snippets right into “Skedge” and they will (hopefully) just do what they claim to do:
 
 ##### 01)
-```
+```python
 ###################
 # Draw Layer Bounds
 ###################
@@ -84,7 +84,7 @@ NSRectFill(rect)
 ```
 
 ##### 02)
-```
+```python
 ###################################################################
 # Draw filled Path with red outline and highlight every second Node
 ###################################################################
@@ -113,7 +113,7 @@ for path in layer.paths:
 ```
 
 ##### 03)
-```
+```python
 #################################################
 # Draw plumblines at each path’s center (x and y)
 #################################################
