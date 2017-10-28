@@ -17,15 +17,15 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.1</string>
+	<string>1.2.2</string>
 	<key>UpdateFeedURL</key>
 	<string>____OnlineUrlToThisPlist____</string>
 	<key>productPageURL</key>
 	<string>____ProductPageURL____</string>
 	<key>productReleaseNotes</key>
-	<string>Add global to syntax keywords</string>
+	<string>Better Syntax Highlighting</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright, Mark Frömberg, 2017</string>
 	<key>NSPrincipalClass</key>

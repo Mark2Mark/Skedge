@@ -81,12 +81,14 @@ for path in layer.paths:
 # C O L O R S
 #============
 
-selectionColorBG = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.737, 0.914, 0, 0.5) # (0, 0.75, 1, 0.5)
+selectionColorBG = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.737, 0.914, 0, 0.5)
 selectionColorFG = NSColor.blackColor()
 textFieldColorBG = NSColor.colorWithCalibratedRed_green_blue_alpha_(1.0, 1.0, 1.0, 0.1)
 textFieldColorText = NSColor.blackColor()
 syntaxConstantsColor = NSColor.redColor()
-syntaxKeywordsColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.086, 0.58, 0.682, 1) # (0.09, 0.67, 0.65, 1)
+syntaxKeywordsColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.086, 0.58, 0.682, 1)
+syntaxDigitsColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.74, 0.0, 0.0, 1)
+syntaxSecondTextColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.4, 0.4, 0.4, 1)
 syntaxPunctuationColor = NSColor.orangeColor() # colorWithCalibratedRed_green_blue_alpha_(0, 0.77, 0.54, 1)
 caretColor = NSColor.redColor()
 
@@ -103,15 +105,19 @@ keywordsWithSpace = [
 u"def ",
 u"for ",
 u"in ",
+u"in ",
+u"if ",
+u"elif ",
+u"else ",
 u"from ",
 u"print ",
 u"except ",
 u"global ",
 u"as ",
-u"\+ ", # Not working
-u"- ",
-u"\* ", # Not working
-u"/ ",
+# u"+ ", # Not working, will get Extra Invitation
+# u"- ", # Not working, will get Extra Invitation
+# u"* ", # Not working, will get Extra Invitation
+# u"/ ", # Not working, will get Extra Invitation
 u"= ",
 u"== ",
 u"% ",
@@ -124,7 +130,7 @@ u"+= ",
 u"-= ",
 u"import " ## ! KEEP u"import " at end of this list, otherwise some Keywords wont work !
 ]
-keywordsWithoutSpace = [u"try:", u"except:",] # Period not implemented
+keywordsWithoutSpace = [u"try:", u"except:", u"else:",] # Period not implemented
 constants = [u" True", u" False", u" None", ]
 
 
@@ -146,7 +152,7 @@ class CodeEditor(NSResponder):
 		self.toggle = False
 		self.liveCodeMode = 0
 		self.openFilePath = None
-		self.w = FloatingWindow((800, 600), minSize=(800, 600), title="%s %s" % (name, version), autosaveName="%s.mainwindow" % self.vID ) ## restore window position
+		self.w = FloatingWindow((800, 600), minSize=(400, 600), title="%s %s" % (name, version), autosaveName="%s.mainwindow" % self.vID ) ## restore window position
 
 		# textView
 		#---------
@@ -253,7 +259,11 @@ class CodeEditor(NSResponder):
 	def syntaxHighlighter(self):
 
 		def findIter(subString, completeString):
-			return [m.start() for m in re.finditer(subString, completeString)]
+			try:
+				return [m.start() for m in re.finditer(subString, completeString)]
+			except:
+				return [m.start() for m in re.finditer(u"\%s" % subString, completeString)]
+
 
 		def doPunctuation(mySring):
 			mySring = str(mySring)
@@ -262,58 +272,88 @@ class CodeEditor(NSResponder):
 					end = len(mySring)
 					ranges.append( (start, end, syntaxPunctuationColor ) )			
 
-		self.textView.setTextColor_range_(NSColor.blackColor(), NSMakeRange(0, len(self.code))) # Reset first
-		ranges = []
-		for line in self.code.splitlines():
-			# Comments: Gray
-			#---------------
-			if line.startswith( tuple([u"%s#" % (x * u"\t") for x in range(8)]) ): # allow 8 tabs in front of "#"
-				start = self.code.index(line, len(line))
-				end = len(line)
-				ranges.append( (start, end, NSColor.grayColor()) )
+
+		try:
+
+			self.textView.setTextColor_range_(NSColor.blackColor(), NSMakeRange(0, len(self.code))) # Reset first
+			ranges = []
+			for line in self.code.splitlines():
+				# Comments: Gray
+				#---------------
+				if line.startswith( tuple([u"%s#" % (x * u"\t") for x in range(8)]) ): # allow 8 tabs in front of "#"
+					try:
+						start = self.code.index(line, len(line))
+						end = len(line)
+						ranges.append( (start, end, NSColor.grayColor()) )
+					except: pass
 
 
-			# keywords: Orange
-			#-------------------
-			# ddd = u"."
-			# if ddd in line:
-			# 	splitted = [u for x in line.split(ddd) for u in (x, ddd)] # Split at period, but keep period in list
-			# 	splitted = splitted[:-1] # To get rid of trailing
-			# else:
-			# 	splitted = line.split(" ")
-			splitted = line.split(" ")
-			for w in splitted:
-				doPunctuation(",") # Not working with period
-				doPunctuation(":") # Not working with period
-				for kWord in keywordsWithSpace:
-					if kWord == "%s " % w.lstrip():
-						for start in findIter(kWord, self.code):
-							end = len(kWord)
-							ranges.append( (start, end, syntaxKeywordsColor ) )
-				for kWord in keywordsWithoutSpace:
-					if kWord == w.lstrip():
-						for start in findIter(kWord, self.code):
-							end = len(kWord)
-							ranges.append( (start, end, syntaxKeywordsColor ) )
-				for kWord in constants:
-					## A)
-					if kWord == " %s" % w: # Case: " True" / " False"
-						for start in findIter(kWord, self.code):
-							end = len(kWord)
-							ranges.append( (start, end, syntaxConstantsColor ) )
-					## B)
-					if "(%s)" % kWord[1:] in w: # Case: "(True)" / "(False)"
-						for start in findIter(kWord[1:], self.code):
-							end = len(kWord[1:])
-							ranges.append( (start, end, syntaxConstantsColor ) )
-					## Cannot merge A & B here.
+				# keywords: Orange
+				#-------------------
+				# ddd = u"."
+				# if ddd in line:
+				# 	splitted = [u for x in line.split(ddd) for u in (x, ddd)] # Split at period, but keep period in list
+				# 	splitted = splitted[:-1] # To get rid of trailing
+				# else:
+				# 	splitted = line.split(" ")
+				splitted = line.split(" ")
+				for w in splitted:
+					doPunctuation(",") # Not working with period
+					doPunctuation(":") # Not working with period
+					for kWord in keywordsWithSpace:
+						if kWord == "%s " % w.lstrip():
+							for start in findIter(kWord, self.code):
+								end = len(kWord)
+								ranges.append( (start, end, syntaxKeywordsColor ) )
+					for kWord in keywordsWithoutSpace:
+						if kWord == w.lstrip():
+							for start in findIter(kWord, self.code):
+								end = len(kWord)
+								ranges.append( (start, end, syntaxKeywordsColor ) )
+					for kWord in constants:
+						## A)
+						if kWord == " %s" % w: # Case: " True" / " False"
+							for start in findIter(kWord, self.code):
+								end = len(kWord)
+								ranges.append( (start, end, syntaxConstantsColor ) )
+						## B)
+						if "(%s)" % kWord[1:] in w: # Case: "(True)" / "(False)"
+							for start in findIter(kWord[1:], self.code):
+								end = len(kWord[1:])
+								ranges.append( (start, end, syntaxConstantsColor ) )
+						## Cannot merge A & B here.
 
-		# Apply ranges
-		#-------------
-		for rng in ranges:
-			s, e, color = rng
-			self.textView.setTextColor_range_(color, NSMakeRange(s, e))
+					## All digits:
+					try: # Make digits red (Unfortunately it colors also digits at end of words)
+						for f in re.findall( r"\d+", w ): ## All digits
+							# print "A", f
+							for start in findIter(str(f), self.code):
+								end = len(str(f))
+								ranges.append( (start, end, syntaxDigitsColor ) )
+					except: pass
 
+					try: # Extra Invitation: "*", "+", "-", "/"
+						for f in re.findall( r"[\*\+\-\/]", w ):
+							for start in findIter(str(f), self.code):
+								end = len(str(f))
+								ranges.append( (start, end, syntaxKeywordsColor ) )
+					except: pass
+
+					try: # Extra Invitation: "()", "[]", "{}" BUT not "."!
+						for f in re.findall( r"[\(\)\{\}\[\]]", w ):
+							for start in findIter(str(f), self.code):
+								end = len(str(f))
+								ranges.append( (start, end, syntaxSecondTextColor ) )
+					except: pass
+
+
+			# Apply ranges
+			#-------------
+			for rng in ranges:
+				s, e, color = rng
+				self.textView.setTextColor_range_(color, NSMakeRange(s, e))
+		except:
+			print traceback.format_exc()
 
 	#======================
 	# O P E N   &   S A V E
