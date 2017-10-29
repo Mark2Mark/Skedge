@@ -83,14 +83,15 @@ for path in layer.paths:
 # C O L O R S
 #============
 
-selectionColorBG = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.737, 0.914, 0, 0.5)
-selectionColorFG = NSColor.blackColor()
-textFieldColorBG = NSColor.colorWithCalibratedRed_green_blue_alpha_(1.0, 1.0, 1.0, 0.1)
-textFieldColorText = NSColor.blackColor()
+codeEditorFontSize = 14
+selectionBGColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.737, 0.914, 0, 0.5)
+selectionFGColor = NSColor.blackColor()
+editorBGColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(1.0, 1.0, 1.0, 0.1)
+editorTextColor = NSColor.blackColor()
 syntaxConstantsColor = NSColor.redColor()
 syntaxKeywordsColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.086, 0.58, 0.682, 1)
 syntaxDigitsColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.74, 0.0, 0.0, 1)
-syntaxSecondTextColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.4, 0.4, 0.4, 1)
+syntaxLightTextColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.4, 0.4, 0.4, 1)
 syntaxPunctuationColor = NSColor.orangeColor() # colorWithCalibratedRed_green_blue_alpha_(0, 0.77, 0.54, 1)
 caretColor = NSColor.redColor()
 
@@ -103,11 +104,9 @@ __METHOD__ = DRAWBACKGROUND # DRAWFOREGROUND
 # S Y N T A X   K E Y W O R D S
 #==============================
 
-keywordsWithSpace = [
+keywordsWithSpace = [ # Space to the right.
 u"def ",
 u"for ",
-u"in ",
-u"in ",
 u"if ",
 u"elif ",
 u"else ",
@@ -132,6 +131,7 @@ u"+= ",
 u"-= ",
 u"import " ## ! KEEP u"import " at end of this list, otherwise some Keywords wont work !
 ]
+keywordsWithSpaces = [u" in ",] # Space to both sides.
 keywordsWithoutSpace = [u"try:", u"except:", u"else:",] # Period not implemented
 constants = [u" True", u" False", u" None", ]
 
@@ -160,20 +160,20 @@ class CodeEditor(NSResponder):
 		#---------
 		self.w.textEditor = TextEditor((0, 0, -0, -40), templateCode, callback=self.doLiveCodeMode)
 		self.textView = self.w.textEditor._textView
-		try:
-			self.textView.setFont_( NSFont.fontWithName_size_( "Gintronic", 14 ) ) # Only if you got it :)
-		except:
-			self.textView.setFont_( NSFont.fontWithName_size_( "Menlo", 14 ) )
+		# try: # Not needed here anymore. Will be set in `syntaxHighlighter()`
+		# 	self.textView.setFont_( NSFont.fontWithName_size_( "Gintronic", codeEditorFontSize ) ) # Only if you got it :)
+		# except:
+		# 	self.textView.setFont_( NSFont.fontWithName_size_( "Menlo", codeEditorFontSize ) )
 
-		self.textView.setTextColor_( textFieldColorText )
-		self.textView.setBackgroundColor_( textFieldColorBG )
+		self.textView.setTextColor_( editorTextColor )
+		self.textView.setBackgroundColor_( editorBGColor )
 		self.textView.setInsertionPointColor_( caretColor )
 		self.textView.setRichText_( True )
 		self.w.textEditor._nsObject.setBorderType_( NSNoBorder )
 		self.texteEditorScrollView = self.w.textEditor._nsObject
 		textSelection = {}
-		textSelection[NSBackgroundColorAttributeName] = selectionColorBG
-		textSelection[NSForegroundColorAttributeName] = selectionColorFG
+		textSelection[NSBackgroundColorAttributeName] = selectionBGColor
+		textSelection[NSForegroundColorAttributeName] = selectionFGColor
 		self.textView.setSelectedTextAttributes_( textSelection )
 		self.textView.setUsesFindBar_( True )
 		self.textView.setTextContainerInset_( ((10, 15)) )
@@ -235,7 +235,7 @@ class CodeEditor(NSResponder):
 		if self.code is not None:
 			try:
 				exec self.code
-				Glyphs.clearLog()
+				# Glyphs.clearLog() # Maybe better not.
 			except:
 				## This is the actual Code Log
 				## TODO: pass into own log window.
@@ -262,7 +262,7 @@ class CodeEditor(NSResponder):
 				self.skedgeLog() # print traceback.format_exc()
 
 	def skedgeLog(self):
-		Glyphs.clearLog()
+		# Glyphs.clearLog() # Maybe better not.
 		print traceback.format_exc()
 
 	def performClick(self):
@@ -271,100 +271,120 @@ class CodeEditor(NSResponder):
 
 	def syntaxHighlighter(self):
 
+		#-------
+		# Helper
+		#-------
+
+		def setFontInRange(fontName, fallbackFontName, range):
+			try:
+				self.textView.setFont_range_( NSFont.fontWithName_size_( fontName, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
+			except:
+				self.textView.setFont_range_( NSFont.fontWithName_size_( fallbackFontName, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
+
 		def findIter(subString, completeString):
 			try:
 				return [m.start() for m in re.finditer(subString, completeString)]
 			except:
 				return [m.start() for m in re.finditer(u"\%s" % subString, completeString)]
 
+		def rangeSubset( subRange, wholeRange ):
+			return set( ( subRange ) ).issubset( wholeRange )
+
+		def writeRange(word, color):
+			for start in findIter(word, self.code):
+				end = len(word)
+				ranges[start] = ( end, color )
 
 		def doPunctuation(mySring):
 			mySring = str(mySring)
 			if mySring in "%s " % w:
 				for start in findIter(mySring, self.code): # [m.start() for m in re.finditer(kWord, self.code)]:
 					end = len(mySring)
-					ranges.append( (start, end, syntaxPunctuationColor ) )			
+					ranges[start] = ( end, syntaxPunctuationColor )
 
+
+		#-----
+		# Main
+		#-----
 
 		try:
-
 			self.textView.setTextColor_range_(NSColor.blackColor(), NSMakeRange(0, len(self.code))) # Reset first
-			ranges = []
+			setFontInRange( "Gintronic", "Menlo", (0, len(self.code)) ) # Reset first
+
+			ranges = {}
 			for line in self.code.splitlines():
-				# Comments: Gray
-				#---------------
+
+				# Comments
+				#---------
 				if line.startswith( tuple([u"%s#" % (x * u"\t") for x in range(8)]) ): # allow 8 tabs in front of "#"
 					try:
 						start = self.code.index(line, len(line))
 						end = len(line)
-						ranges.append( (start, end, NSColor.grayColor()) )
-					except: pass
+						ranges[start] = ( end, NSColor.grayColor() )
+					except:
+						print traceback.format_exc()
 
 
-				# keywords: Orange
-				#-------------------
-				# ddd = u"."
-				# if ddd in line:
-				# 	splitted = [u for x in line.split(ddd) for u in (x, ddd)] # Split at period, but keep period in list
-				# 	splitted = splitted[:-1] # To get rid of trailing
-				# else:
-				# 	splitted = line.split(" ")
+				# All the rest
+				#-------------
 				splitted = line.split(" ")
 				for w in splitted:
+
 					doPunctuation(",") # Not working with period
 					doPunctuation(":") # Not working with period
+
+					# Keywords:
+					#----------
 					for kWord in keywordsWithSpace:
-						if kWord == "%s " % w.lstrip():
-							for start in findIter(kWord, self.code):
-								end = len(kWord)
-								ranges.append( (start, end, syntaxKeywordsColor ) )
-					for kWord in keywordsWithoutSpace:
+						if kWord == "%s " % w.lstrip(): # Space to the right.
+							writeRange(kWord, syntaxKeywordsColor)
+
+					for kWord in keywordsWithSpaces:
+						if kWord == " %s " % w.lstrip(): # Space to both sides.
+							writeRange(kWord, syntaxKeywordsColor)
+
+					for kWord in keywordsWithoutSpace: # No space.
 						if kWord == w.lstrip():
-							for start in findIter(kWord, self.code):
-								end = len(kWord)
-								ranges.append( (start, end, syntaxKeywordsColor ) )
+							writeRange(kWord, syntaxKeywordsColor)
+
 					for kWord in constants:
 						## A)
 						if kWord == " %s" % w: # Case: " True" / " False"
-							for start in findIter(kWord, self.code):
-								end = len(kWord)
-								ranges.append( (start, end, syntaxConstantsColor ) )
+							writeRange(kWord, syntaxConstantsColor)
 						## B)
 						if "(%s)" % kWord[1:] in w: # Case: "(True)" / "(False)"
-							for start in findIter(kWord[1:], self.code):
-								end = len(kWord[1:])
-								ranges.append( (start, end, syntaxConstantsColor ) )
+							writeRange(kWord[1:], syntaxConstantsColor)
 						## Cannot merge A & B here.
 
-					## All digits:
+					# All digits:
+					#------------
 					try: # Make digits red (Unfortunately it colors also digits at end of words)
 						for f in re.findall( r"\d+", w ): ## All digits
-							# print "A", f
-							for start in findIter(str(f), self.code):
-								end = len(str(f))
-								ranges.append( (start, end, syntaxDigitsColor ) )
+							writeRange(str(f), syntaxDigitsColor)
 					except: pass
 
-					try: # Extra Invitation: "*", "+", "-", "/"
-						for f in re.findall( r"[\*\+\-\/]", w ):
-							for start in findIter(str(f), self.code):
-								end = len(str(f))
-								ranges.append( (start, end, syntaxKeywordsColor ) )
+					# Extra Invitations:
+					#-------------------
+					try:
+						for f in re.findall( r"[\*\+\-\/]", w ): # "*", "+", "-", "/"
+							writeRange(str(f), syntaxKeywordsColor)
 					except: pass
 
-					try: # Extra Invitation: "()", "[]", "{}" BUT not "."!
-						for f in re.findall( r"[\(\)\{\}\[\]]", w ):
-							for start in findIter(str(f), self.code):
-								end = len(str(f))
-								ranges.append( (start, end, syntaxSecondTextColor ) )
+					try:
+						for f in re.findall( r"[\(\)\{\}\[\]]", w ): # "()", "[]", "{}" BUT not "."!
+							writeRange(str(f), syntaxLightTextColor)
 					except: pass
 
 
 			# Apply ranges
 			#-------------
-			for rng in ranges:
-				s, e, color = rng
+			for key, val in ranges.iteritems():
+				s = key
+				e, color = val
 				self.textView.setTextColor_range_(color, NSMakeRange(s, e))
+				
+				if color == NSColor.grayColor(): # Set Italic for comments:
+					setFontInRange( "Gintronic-Italic", "Menlo-Italic", (s, e) ) 
 		except:
 			self.skedgeLog() # print traceback.format_exc()
 			# console.log( traceback.format_exc() )

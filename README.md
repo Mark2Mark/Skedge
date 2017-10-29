@@ -167,6 +167,7 @@ for path in layer.paths:
 ---
 ##### TODO
 
+- Fix encoding. Cannot save a file with words like »don’t«.
 - Display change of file in Window Title (Completeley different file handling).
 - Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later. (For instance calling some variables and functions `global`)
 - Provide some code snippets.
