@@ -45,9 +45,9 @@ from GlyphsApp import *
 name = "Skedge"
 author = u"Mark Frömberg"
 year = "2016"
-version = "1.2"
+version = "1.2.5"
 releaseDate = "2017-10-25"
-versionDate = "2017-10-29"
+versionDate = "2017-11-02"
 
 
 #================
@@ -91,7 +91,7 @@ editorTextColor = NSColor.blackColor()
 syntaxConstantsColor = NSColor.redColor()
 syntaxKeywordsColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.086, 0.58, 0.682, 1)
 syntaxDigitsColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.74, 0.0, 0.0, 1)
-syntaxLightTextColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.4, 0.4, 0.4, 1)
+syntaxSecondTextColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.4, 0.4, 0.4, 1)
 syntaxPunctuationColor = NSColor.orangeColor() # colorWithCalibratedRed_green_blue_alpha_(0, 0.77, 0.54, 1)
 caretColor = NSColor.redColor()
 
@@ -106,6 +106,7 @@ __METHOD__ = DRAWBACKGROUND # DRAWFOREGROUND
 
 keywordsWithSpace = [ # Space to the right.
 u"def ",
+u"class ",
 u"for ",
 u"if ",
 u"elif ",
@@ -115,26 +116,27 @@ u"print ",
 u"except ",
 u"global ",
 u"as ",
+u"print ",
 # u"+ ", # Not working, will get Extra Invitation
 # u"- ", # Not working, will get Extra Invitation
 # u"* ", # Not working, will get Extra Invitation
 # u"/ ", # Not working, will get Extra Invitation
-u"= ",
-u"== ",
-u"% ",
-u"!= ",
-u"< ",
-u"> ",
-u">= ",
-u"<= ",
-u"+= ",
-u"-= ",
+# u"= ",
+# u"== ",
+# u"% ",
+# u"!= ",
+# u"< ",
+# u"> ",
+# u">= ",
+# u"<= ",
+# u"+= ",
+# u"-= ",
 u"import " ## ! KEEP u"import " at end of this list, otherwise some Keywords wont work !
 ]
 keywordsWithSpaces = [u" in ",] # Space to both sides.
-keywordsWithoutSpace = [u"try:", u"except:", u"else:",] # Period not implemented
-constants = [u" True", u" False", u" None", ]
-
+keywordsWithoutSpace = [u"try:", u"except:", u"else:", u"\%s", ] # Period not implemented
+constants = [u"True", u"False", u"None", "self" ]
+commentTrigger = u"#"
 
 
 
@@ -281,110 +283,128 @@ class CodeEditor(NSResponder):
 			except:
 				self.textView.setFont_range_( NSFont.fontWithName_size_( fallbackFontName, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
 
-		def findIter(subString, completeString):
+		'''
+		def safeFindIter(subString, completeString):
 			try:
 				return [m.start() for m in re.finditer(subString, completeString)]
 			except:
 				return [m.start() for m in re.finditer(u"\%s" % subString, completeString)]
+		'''
 
-		def rangeSubset( subRange, wholeRange ):
-			return set( ( subRange ) ).issubset( wholeRange )
+		def colorString(searchItem, line, color, lenTillEOL=0, checkForPreceedingLetter=False):
+			try:
+				for m in re.finditer(searchItem, line):
+					startInLine = m.start()
+					previousChar = line[m.start()-1]
+					thisLineStart, foundLength = startInLine, m.end()-startInLine
+					try:
+						if checkForPreceedingLetter and previousChar.isalpha():
+							pass
+						else:
+							s, e = thisLineStart + self.charCount+1, foundLength+lenTillEOL
+							self.textView.setTextColor_range_(color, NSMakeRange(s, e) )
+						if color == NSColor.grayColor(): # Set Italic for comments:
+							setFontInRange( "Gintronic-Italic", "Menlo-Italic", (s, e) )
+					except:
+						pass
+			except:
+				pass # print traceback.format_exc()
 
-		def writeRange(word, color):
-			for start in findIter(word, self.code):
-				end = len(word)
-				ranges[start] = ( end, color )
-
-		def doPunctuation(mySring):
-			mySring = str(mySring)
-			if mySring in "%s " % w:
-				for start in findIter(mySring, self.code): # [m.start() for m in re.finditer(kWord, self.code)]:
-					end = len(mySring)
-					ranges[start] = ( end, syntaxPunctuationColor )
 
 
-		#-----
+
+
+		#---------------------------------------------------
 		# Main
-		#-----
+		#---------------------------------------------------
 
 		try:
 			self.textView.setTextColor_range_(NSColor.blackColor(), NSMakeRange(0, len(self.code))) # Reset first
 			setFontInRange( "Gintronic", "Menlo", (0, len(self.code)) ) # Reset first
 
 			ranges = {}
-			for line in self.code.splitlines():
 
-				# Comments
+
+			self.charCount = 0
+			for li, line in enumerate(self.code.splitlines()):
+
+				if li > 0:
+					self.charCount += 1 # LineBreak maybe?
+				else:
+					self.charCount -= 1
+
+				# COMMENTS
 				#---------
+				'''
+				BUG: When you have 2 or more exact same lines
+				of comments, all but the first dont get grey.
+				'''
+				# A) Complete Comment Line
 				if line.startswith( tuple([u"%s#" % (x * u"\t") for x in range(8)]) ): # allow 8 tabs in front of "#"
 					try:
-						start = self.code.index(line, len(line))
+						try:
+							start = self.code.index(str(line), len(line))
+						except:
+							start = self.code.index(str(line), 0) # Avoid stupid `ValueError: Substring not found`
 						end = len(line)
 						ranges[start] = ( end, NSColor.grayColor() )
+						self.textView.setTextColor_range_(NSColor.grayColor(), NSMakeRange(start, end))
+						setFontInRange( "Gintronic-Italic", "Menlo-Italic", (start, end) )
+						self.charCount += len(line) # Do this AFTER Applying the range. We count the Lines UP to the currently checked one and add this to the found start
 					except:
-						print traceback.format_exc()
+						pass # print traceback.format_exc()
+				# B) Inline Comment (Works with only one "#" so far)
+				# BUG: stops the previous parts of the line from highlighting.
+				elif [m for m in re.finditer(commentTrigger, line)]:
+					colorString( commentTrigger, line, NSColor.grayColor(), lenTillEOL=len(line.split(commentTrigger)[1]) )
+					self.charCount += len(line)
+					
 
-
-				# All the rest
+				# ALL THE REST
 				#-------------
-				splitted = line.split(" ")
-				for w in splitted:
+				else:
+					colorString( r"\d+", line, syntaxDigitsColor,checkForPreceedingLetter=True )
+					colorString( r"[\*\+\-\/\=\!\>\<\%\&]", line, syntaxKeywordsColor )		
+					colorString( r"[\(\)\{\}\[\]]", line, syntaxSecondTextColor )
+					colorString( r"[\;\:\,]", line, syntaxPunctuationColor )
+					colorString( r"\.", line, syntaxSecondTextColor )
 
-					doPunctuation(",") # Not working with period
-					doPunctuation(":") # Not working with period
-
-					# Keywords:
-					#----------
 					for kWord in keywordsWithSpace:
-						if kWord == "%s " % w.lstrip(): # Space to the right.
-							writeRange(kWord, syntaxKeywordsColor)
-
+						colorString( kWord, line, syntaxKeywordsColor )
+					for kWord in keywordsWithoutSpace:
+						colorString( kWord, line, syntaxKeywordsColor )
 					for kWord in keywordsWithSpaces:
-						if kWord == " %s " % w.lstrip(): # Space to both sides.
-							writeRange(kWord, syntaxKeywordsColor)
-
-					for kWord in keywordsWithoutSpace: # No space.
-						if kWord == w.lstrip():
-							writeRange(kWord, syntaxKeywordsColor)
-
+						colorString( kWord, line, syntaxKeywordsColor )
 					for kWord in constants:
-						## A)
-						if kWord == " %s" % w: # Case: " True" / " False"
-							writeRange(kWord, syntaxConstantsColor)
-						## B)
-						if "(%s)" % kWord[1:] in w: # Case: "(True)" / "(False)"
-							writeRange(kWord[1:], syntaxConstantsColor)
-						## Cannot merge A & B here.
+						colorString( kWord, line, syntaxConstantsColor )
 
-					# All digits:
-					#------------
-					try: # Make digits red (Unfortunately it colors also digits at end of words)
-						for f in re.findall( r"\d+", w ): ## All digits
-							writeRange(str(f), syntaxDigitsColor)
-					except: pass
+					self.charCount += len(line) # Do this AFTER Applying the range. We count the Lines UP to the currently checked one and add this to the found start
+	
 
-					# Extra Invitations:
-					#-------------------
+				# BLOCK COMMENTS
+				#---------------
+				# Not working with line breaks yet.
+				# `re.compile(searchstring, re.MULTILINE)` not figured out.
+				try:
+					bQs, bQe = u"\'\'\'", u"\'\'\'"
+					blockQuote = ""
 					try:
-						for f in re.findall( r"[\*\+\-\/]", w ): # "*", "+", "-", "/"
-							writeRange(str(f), syntaxKeywordsColor)
-					except: pass
+						result = re.search(u"\'\'\'(.*)\'\'\'", self.code)
+						blockQuote = "%s%s%s" % ( bQs, result.group(1), bQe )
+					except:
+						result = re.search(u"\'\'\'\n(.*)\n\'\'\'", self.code)
+						blockQuote = "%s\n%s\n%s" % ( bQs, result.group(1), bQe )
+					if len(blockQuote) > 0:
+						for m in re.finditer( re.escape(blockQuote), self.code): # re.escape() to make special chars work (e.g. [] () * + ...)
+							bs, be = m.start(), len(blockQuote)
+							self.textView.setTextColor_range_(NSColor.grayColor(), NSMakeRange(bs, be) )
+							setFontInRange( "Gintronic-Italic", "Menlo-Italic", (bs, be) )
+				except:
+					pass # print traceback.format_exc()
 
-					try:
-						for f in re.findall( r"[\(\)\{\}\[\]]", w ): # "()", "[]", "{}" BUT not "."!
-							writeRange(str(f), syntaxLightTextColor)
-					except: pass
 
 
-			# Apply ranges
-			#-------------
-			for key, val in ranges.iteritems():
-				s = key
-				e, color = val
-				self.textView.setTextColor_range_(color, NSMakeRange(s, e))
-				
-				if color == NSColor.grayColor(): # Set Italic for comments:
-					setFontInRange( "Gintronic-Italic", "Menlo-Italic", (s, e) ) 
+
 		except:
 			self.skedgeLog() # print traceback.format_exc()
 			# console.log( traceback.format_exc() )
