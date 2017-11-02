@@ -117,20 +117,6 @@ u"except ",
 u"global ",
 u"as ",
 u"print ",
-# u"+ ", # Not working, will get Extra Invitation
-# u"- ", # Not working, will get Extra Invitation
-# u"* ", # Not working, will get Extra Invitation
-# u"/ ", # Not working, will get Extra Invitation
-# u"= ",
-# u"== ",
-# u"% ",
-# u"!= ",
-# u"< ",
-# u"> ",
-# u">= ",
-# u"<= ",
-# u"+= ",
-# u"-= ",
 u"import " ## ! KEEP u"import " at end of this list, otherwise some Keywords wont work !
 ]
 keywordsWithSpaces = [u" in ",] # Space to both sides.
@@ -283,13 +269,6 @@ class CodeEditor(NSResponder):
 			except:
 				self.textView.setFont_range_( NSFont.fontWithName_size_( fallbackFontName, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
 
-		'''
-		def safeFindIter(subString, completeString):
-			try:
-				return [m.start() for m in re.finditer(subString, completeString)]
-			except:
-				return [m.start() for m in re.finditer(u"\%s" % subString, completeString)]
-		'''
 
 		def colorString(searchItem, line, color, lenTillEOL=0, checkForPreceedingLetter=False):
 			try:
@@ -309,8 +288,6 @@ class CodeEditor(NSResponder):
 						pass
 			except:
 				pass # print traceback.format_exc()
-
-
 
 
 
@@ -383,20 +360,22 @@ class CodeEditor(NSResponder):
 
 				# BLOCK COMMENTS
 				#---------------
-				# Not working with line breaks yet.
+				# Now checking the whole self.code
+				#
+				# BUG: Not working with line breaks yet.
 				# `re.compile(searchstring, re.MULTILINE)` not figured out.
 				try:
-					bQs, bQe = u"\'\'\'", u"\'\'\'"
-					blockQuote = ""
+					BCTrigger = u"\'\'\'"
+					foundBC = ""
 					try:
 						result = re.search(u"\'\'\'(.*)\'\'\'", self.code)
-						blockQuote = "%s%s%s" % ( bQs, result.group(1), bQe )
+						foundBC = "%s%s%s" % ( BCTrigger, result.group(1), BCTrigger )
 					except:
 						result = re.search(u"\'\'\'\n(.*)\n\'\'\'", self.code)
-						blockQuote = "%s\n%s\n%s" % ( bQs, result.group(1), bQe )
-					if len(blockQuote) > 0:
-						for m in re.finditer( re.escape(blockQuote), self.code): # re.escape() to make special chars work (e.g. [] () * + ...)
-							bs, be = m.start(), len(blockQuote)
+						foundBC = "%s\n%s\n%s" % ( BCTrigger, result.group(1), BCTrigger )
+					if len(foundBC) > 0:
+						for m in re.finditer( re.escape(foundBC), self.code): # re.escape() to make special chars work (e.g. [] () * + ...)
+							bs, be = m.start(), len(foundBC)
 							self.textView.setTextColor_range_(NSColor.grayColor(), NSMakeRange(bs, be) )
 							setFontInRange( "Gintronic-Italic", "Menlo-Italic", (bs, be) )
 				except:
