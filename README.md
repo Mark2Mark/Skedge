@@ -41,6 +41,7 @@ A plugin which draws something to your active Edit Tab
 - `Cmd+K` resets the drawing in your Edit Tab. The same happens when you close the window.
 - `Cmd+P` lets you print your code or save it as PDF.
 - Python etiquette: please use `TABS`! I’m not trying to force you into [that endless battle](https://stackoverflow.com/questions/119562/tabs-versus-spaces-in-python-programming), I just didn’t prepare the tool to deal with `SPACES` yet. Bear with me. BTW: f*** spaces! :D 
+- The code in “Skedge” can be almost exactly transferred into an actual reporter plugin. For this, don’t forget to build it as a `class` like the `glyphsReporter` do. You’ll have to instantiate and call it in your Skedge code, which you don’t have to do later in the Reporter Plugin.
 
 ---
 ### Help
@@ -159,7 +160,6 @@ for path in layer.paths:
 ---
 ##### Known Issues
 
-- The code in “Skedge” can be almost exactly transferred into the e.g. `drawBackground()` method of your actual reporter plugin. Don’t forget to add the `self.` where needed, though. “Skedge” is build to not need it, so watch out for these.
 - Some people report a crash caused by scrolling in the Code Editor. I cannot reproduce yet, so I’ll need Console Logs.
 - Some Plugins which add a DRAWBACKGROUND callback could interfere with this plugin and hence either or both fail to operate.
 - Syntax Highlighting is yet very rudimentary. But waaay better than none.
