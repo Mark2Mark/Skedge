@@ -165,6 +165,7 @@ class CodeEditor(NSResponder):
 		self.textView.setSelectedTextAttributes_( textSelection )
 		self.textView.setUsesFindBar_( True )
 		self.textView.setTextContainerInset_( ((10, 15)) )
+		self.textView.turnOffLigatures_( True )
 
 
 		# Buttons
