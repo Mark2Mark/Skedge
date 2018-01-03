@@ -136,6 +136,13 @@ class CodeEditor(NSResponder):
 
 	def init(self):
 
+		## Subclass / Monkey Patch:
+		## Avoid NSPanel close on ESC key:	
+		def __cancel_(self, value):
+			pass # print "ESC Key not closing the panel anymore :)"
+		FloatingWindow.cancel_ = __cancel_
+		## -------------------------
+
 		# Inits
 		#------
 		self.vID = "com.markfromberg.%s" % name # vendorID
