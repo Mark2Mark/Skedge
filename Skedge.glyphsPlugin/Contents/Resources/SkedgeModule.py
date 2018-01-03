@@ -44,10 +44,10 @@ from GlyphsApp import *
 
 name = "Skedge"
 author = u"Mark Frömberg"
-year = "2016"
-version = "1.2.5"
+year = "2017"
+version = "1.2.6"
 releaseDate = "2017-10-25"
-versionDate = "2017-11-02"
+versionDate = "2018-01-03"
 
 
 #================
