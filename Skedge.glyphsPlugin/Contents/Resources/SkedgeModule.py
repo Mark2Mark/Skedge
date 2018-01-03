@@ -83,15 +83,18 @@ for path in layer.paths:
 # C O L O R S
 #============
 
+def NSrgba_(*args):
+	return NSColor.colorWithCalibratedRed_green_blue_alpha_(*args)
+
 codeEditorFontSize = 14
-selectionBGColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.737, 0.914, 0, 0.5)
+selectionBGColor = NSrgba_(0.737, 0.914, 0, 0.5)
 selectionFGColor = NSColor.blackColor()
-editorBGColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(1.0, 1.0, 1.0, 0.1)
+editorBGColor = NSrgba_(1.0, 1.0, 1.0, 0.1)
 editorTextColor = NSColor.blackColor()
 syntaxConstantsColor = NSColor.redColor()
-syntaxKeywordsColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.086, 0.58, 0.682, 1)
-syntaxDigitsColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.74, 0.0, 0.0, 1)
-syntaxSecondTextColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(0.4, 0.4, 0.4, 1)
+syntaxKeywordsColor = NSrgba_(0.086, 0.58, 0.682, 1)
+syntaxDigitsColor = NSrgba_(0.74, 0.0, 0.0, 1)
+syntaxSecondTextColor = NSrgba_(0.4, 0.4, 0.4, 1)
 syntaxPunctuationColor = NSColor.orangeColor() # colorWithCalibratedRed_green_blue_alpha_(0, 0.77, 0.54, 1)
 caretColor = NSColor.redColor()
 
