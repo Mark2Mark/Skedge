@@ -14,7 +14,7 @@
 from GlyphsApp import *
 from GlyphsApp.plugins import *
 
-import traceback, sys
+import sys
 
 from SkedgeModule import CodeEditor
 
@@ -40,4 +40,5 @@ class SkedgePlugin(GeneralPlugin):
 		try:
 			CodeEditor.new()
 		except:
+			import traceback
 			NSLog(traceback.format_exc())
