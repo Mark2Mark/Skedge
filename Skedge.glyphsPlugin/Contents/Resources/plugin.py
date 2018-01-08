@@ -14,7 +14,7 @@
 from GlyphsApp import *
 from GlyphsApp.plugins import *
 
-import sys
+import sys, traceback
 
 from SkedgeModule import CodeEditor
 
