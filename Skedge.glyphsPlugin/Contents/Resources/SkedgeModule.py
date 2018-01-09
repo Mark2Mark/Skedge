@@ -49,9 +49,7 @@ version = "1.2.6"
 releaseDate = "2017-10-25"
 versionDate = "2018-01-03"
 
-# Git Savvy Test
-
-# TEST 2
+HalloAnjaUndRalph = 3
 
 #================
 # T E M P L A T E
