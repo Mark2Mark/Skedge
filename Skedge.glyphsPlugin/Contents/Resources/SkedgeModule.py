@@ -56,10 +56,8 @@ versionDate = "2018-01-03"
 
 templateCode = """
 import traceback
-
 scale = Glyphs.font.currentTab.scale
 # layer = Glyphs.font.glyphs[0].layers[0]
-
 def badge(x, y, s):
 	path = NSBezierPath.alloc().init()
 	rect = NSRect( (x-s/2, y-s/2), (s, s) )
@@ -67,10 +65,8 @@ def badge(x, y, s):
 	path.appendBezierPath_( ovalInRect )
 	NSColor.colorWithCalibratedRed_green_blue_alpha_( 1, .2, 0, .5 ).set()
 	path.fill()
-
 NSColor.greenColor().colorWithAlphaComponent_(0.3).set()
 layer.bezierPath.fill()
-
 for path in layer.paths:
 	for node in path.nodes:
 		badge(node.x, node.y, 15 / scale )
@@ -450,6 +446,5 @@ class CodeEditor(NSResponder):
 
 	def print_(self, sender):
 		NSPrintOperation.printOperationWithView_( self ).runOperation()
-
 
 
