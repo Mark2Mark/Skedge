@@ -11,6 +11,7 @@
 #
 ###########################################################################################################
 
+#ecternal test
 
 from Foundation import NSResponder, NSFileTypeForHFSTypeCode, NSRect
 from AppKit import NSBezierPath,\
