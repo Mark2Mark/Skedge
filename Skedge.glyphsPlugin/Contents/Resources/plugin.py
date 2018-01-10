@@ -33,12 +33,10 @@ class SkedgePlugin(GeneralPlugin):
 			newMenuItem = NSMenuItem(self.name, s)
 			Glyphs.menu[targetMenu].append(newMenuItem)
 		except:
-			import traceback
 			NSLog(traceback.format_exc())
 	
 	def skedge(self):
 		try:
 			CodeEditor.new()
 		except:
-			import traceback
 			NSLog(traceback.format_exc())
