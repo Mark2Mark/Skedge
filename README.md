@@ -168,7 +168,7 @@ for path in layer.paths:
 ##### Known Issues
 
 - Some people report a crash caused by scrolling in the Code Editor. I cannot reproduce yet, so I’ll need Console Logs.
-- Some Plugins which add a DRAWBACKGROUND callback could interfere with this plugin and hence either or both fail to operate.
+- ~~Some Plugins which add a DRAWBACKGROUND callback could interfere with this plugin and hence either or both fail to operate.~~ [Solved in Glyphs builds higher than around 1110]
 - Syntax Highlighting is yet very rudimentary. But waaay better than none.
 
 ---
