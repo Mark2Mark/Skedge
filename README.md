@@ -57,7 +57,7 @@ You find **help** and **code examples** here:
 
 👉 [Glyphs Documentation](https://docu.glyphsapp.com/)
 
-👉 [Glyphs Devolper Kit (SDK)](https://github.com/schriftgestalt/GlyphsSDK)
+👉 [Glyphs Developer Kit (SDK)](https://github.com/schriftgestalt/GlyphsSDK)
 
 It’s also always possible to peek into public plugins:
 
