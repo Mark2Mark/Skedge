@@ -9,6 +9,7 @@
 #	@Mark2Mark
 #
 #	https://pythex.org/ REGEX Tester
+#	PyQT
 #
 ###########################################################################################################
 
@@ -46,9 +47,9 @@ from GlyphsApp import *
 name = "Skedge"
 author = u"Mark Frömberg"
 year = "2017"
-version = "1.2.6"
+version = "1.2.7"
 releaseDate = "2017-10-25"
-versionDate = "2018-01-03"
+versionDate = "2018-02-17"
 
 
 #================
@@ -108,20 +109,23 @@ keywordsWithSpace = [ # Space to the right.
 u"def ",
 u"class ",
 u"for ",
+u"while ",
 u"if ",
 u"elif ",
 u"else ",
+u"finally ",
 u"from ",
 u"print ",
 u"except ",
 u"global ",
+u"return ",
 u"as ",
 u"print ",
 u"import " ## ! KEEP u"import " at end of this list, otherwise some Keywords wont work !
 ]
-keywordsWithSpaces = [u" in ",] # Space to both sides.
-keywordsWithoutSpace = [u"try:", u"except:", u"else:", u"\%s", ] # Period not implemented
-constants = [u"True", u"False", u"None", "self" ]
+keywordsWithSpaces = [u" in ", u" and ", u" not ", u" is ", u" or ", u" raise ",  u" yield ", ] # Space to both sides.
+keywordsWithoutSpace = [u"try:", u"except:", u"finally:", u"else:", u"\%s", ] # Period not implemented
+constants = [u"True", u"False", u"None", u"self", u"break", u"pass", u"return", u"continue", ]
 commentTrigger = u"#"
 
 
@@ -320,10 +324,12 @@ class CodeEditor(NSResponder):
 
 				# COMMENTS
 				#---------
-				# TODO: this if/else causes highlighting BEFORE comments not to work.
-				# 	+ Perhaps it works if comments get a second loop over all lines
+				# TODO:
+				#	+ This if/else causes highlighting BEFORE comments not to work.
+				# 	  Perhaps it works if comments get a second loop over all lines
 				# 	  after the highlighting is done.
-				commentRE = "#[^\n]*" # from `#` up to newLine
+				# from `#` up to newLine
+				commentRE = "#[^\n]*"
 				if [m for m in re.finditer(commentRE, line)]:
 					try:
 						colorString( commentRE, line, NSColor.grayColor() )
