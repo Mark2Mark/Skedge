@@ -8,6 +8,7 @@
 #	www.markfromberg.com
 #	@Mark2Mark
 #
+#	https://pythex.org/ REGEX Tester
 #
 ###########################################################################################################
 
@@ -319,30 +320,18 @@ class CodeEditor(NSResponder):
 
 				# COMMENTS
 				#---------
-				'''
-				BUG: When you have 2 or more exact same lines
-				of comments, all but the first dont get grey.
-				'''
-				# A) Complete Comment Line
-				if line.startswith( tuple([u"%s#" % (x * u"\t") for x in range(8)]) ): # allow 8 tabs in front of "#"
+				# TODO: this if/else causes highlighting BEFORE comments not to work.
+				# 	+ Perhaps it works if comments get a second loop over all lines
+				# 	  after the highlighting is done.
+				commentRE = "#[^\n]*" # from `#` up to newLine
+				if [m for m in re.finditer(commentRE, line)]:
 					try:
-						try:
-							start = self.code.index(str(line), len(line))
-						except:
-							start = self.code.index(str(line), 0) # Avoid stupid `ValueError: Substring not found`
-						end = len(line)
-						ranges[start] = ( end, NSColor.grayColor() )
-						self.textView.setTextColor_range_(NSColor.grayColor(), NSMakeRange(start, end))
-						setFontInRange( "Gintronic-Italic", "Menlo-Italic", (start, end) )
-						self.charCount += len(line) # Do this AFTER Applying the range. We count the Lines UP to the currently checked one and add this to the found start
+						colorString( commentRE, line, NSColor.grayColor() )
 					except:
-						pass # print traceback.format_exc()
-				# B) Inline Comment (Works with only one "#" so far)
-				# BUG: stops the previous parts of the line from highlighting.
-				elif [m for m in re.finditer(commentTrigger, line)]:
-					colorString( commentTrigger, line, NSColor.grayColor(), lenTillEOL=len(line.split(commentTrigger)[1]) )
+						pass
 					self.charCount += len(line)
 					
+
 
 				# ALL THE REST
 				#-------------
