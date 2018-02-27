@@ -34,7 +34,7 @@ A plugin which draws something to your active Edit Tab
 ### Example
 
 <p align="center"> 
-<img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge_Tunni.gif?raw=true" alt="Skedge" height="">
+<img src="https://raw.githubusercontent.com/Mark2Mark/Skedge/master/Images/Skedge%2002.gif" alt="Skedge" height="">
 </p> 
 
 ---
