@@ -153,7 +153,7 @@ class CodeEditor(NSResponder):
 		self.toggle = False
 		self.liveCodeMode = 0
 		self.openFilePath = None
-		self.w = FloatingWindow((800, 600), minSize=(400, 600), title="%s %s" % (name, version), autosaveName="%s.mainwindow" % self.vID ) ## restore window position
+		self.w = FloatingWindow((800, 600), minSize=(400, 400), title="%s %s" % (name, version), autosaveName="%s.mainwindow" % self.vID ) ## restore window position
 
 		# textView
 		#---------
