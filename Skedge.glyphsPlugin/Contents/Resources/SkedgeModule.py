@@ -159,10 +159,6 @@ class CodeEditor(NSResponder):
 		#---------
 		self.w.textEditor = TextEditor((0, 0, -0, -40), templateCode, callback=self.doLiveCodeMode)
 		self.textView = self.w.textEditor._textView
-		# try: # Not needed here anymore. Will be set in `syntaxHighlighter()`
-		# 	self.textView.setFont_( NSFont.fontWithName_size_( "Gintronic", codeEditorFontSize ) ) # Only if you got it :)
-		# except:
-		# 	self.textView.setFont_( NSFont.fontWithName_size_( "Menlo", codeEditorFontSize ) )
 
 		self.textView.setTextColor_( editorTextColor )
 		self.textView.setBackgroundColor_( editorBGColor )
