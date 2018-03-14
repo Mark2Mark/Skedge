@@ -141,7 +141,7 @@ class CodeEditor(NSResponder):
 	def init(self):
 
 		## Subclass / Monkey Patch:
-		## Avoid NSPanel close on ESC key:	
+		## Avoid NSPanel close on ESC key:
 		def __cancel_(self, value):
 			pass # print "ESC Key not closing the panel anymore :)"
 		FloatingWindow.cancel_ = __cancel_
@@ -188,28 +188,28 @@ class CodeEditor(NSResponder):
 		self.w.resetButton = Button((-150+10, -32, -15, 22), u"Reset ⌘K", callback=self.reset)
 		self.w.resetButton._nsObject.setBezelStyle_( buttonStyle )
 		self.w.resetButton.bind("k", ["command"])
-		
+
 		self.w.bind("close", callback=self.onClose)
 		self.w.open()
-	
+
 		# Enable the saveDocument_ & openDocument_ be
 		# triggered by the menu or keyboard shortcuts
 		#-----------------------------------------------
 		nextResponder = self.w._window.nextResponder()
 		self.w._window.setNextResponder_( self )
 		self.setNextResponder_( nextResponder )
-		
+
 		self.code = None
 		self.w.makeKey()
 		self.addCallback()
 		self.performClick() # First Run after opening a file, must be after addCallback()
 
-	
+
 	def saveDocument_(self, sender):
 		# print "saveDocument_"
 		### Maybe store the file name and just write the file on the second run
 		self.saveFile(sender)
-		
+
 	def openDocument_(self, sender):
 		# print "openDocument_"
 		self.openFile(sender)
@@ -218,13 +218,13 @@ class CodeEditor(NSResponder):
 	#==================
 	# C A L L B A C K S
 	#==================
-	
+
 	def addCallback(self):
 		try:
 			Glyphs.addCallback(self.drawCode, __METHOD__)
 		except:
 			print traceback.format_exc()
-	
+
 	def removeCallback(self):
 		try:
 			Glyphs.removeCallback(self.drawCode, __METHOD__)
@@ -240,7 +240,7 @@ class CodeEditor(NSResponder):
 				## This is the actual Code Log
 				## TODO: pass into own log window.
 				self.skedgeLog() # print traceback.format_exc()
-		
+
 	def run(self, sender):
 		self.code = self.w.textEditor.get()
 		self.syntaxHighlighter()
@@ -336,14 +336,14 @@ class CodeEditor(NSResponder):
 					except:
 						pass
 					self.charCount += len(line)
-					
+
 
 
 				# ALL THE REST
 				#-------------
 				else:
 					colorString( r"\d+", line, syntaxDigitsColor,checkForPreceedingLetter=True )
-					colorString( r"[\*\+\-\/\=\!\>\<\%\&]", line, syntaxKeywordsColor )		
+					colorString( r"[\*\+\-\/\=\!\>\<\%\&]", line, syntaxKeywordsColor )
 					colorString( r"[\(\)\{\}\[\]]", line, syntaxSecondTextColor )
 					colorString( r"[\;\:\,]", line, syntaxPunctuationColor )
 					colorString( r"\.", line, syntaxSecondTextColor )
@@ -358,7 +358,7 @@ class CodeEditor(NSResponder):
 						colorString( kWord, line, syntaxConstantsColor )
 
 					self.charCount += len(line) # Do this AFTER Applying the range. We count the Lines UP to the currently checked one and add this to the found start
-	
+
 
 			# BLOCK COMMENTS
 			#---------------
@@ -389,7 +389,7 @@ class CodeEditor(NSResponder):
 		except:
 			self.skedgeLog() # print traceback.format_exc()
 			# console.log( traceback.format_exc() )
-			
+
 
 	#======================
 	# O P E N   &   S A V E
@@ -441,5 +441,3 @@ class CodeEditor(NSResponder):
 
 	def print_(self, sender):
 		NSPrintOperation.printOperationWithView_( self ).runOperation()
-
-
