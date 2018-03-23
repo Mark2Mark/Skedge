@@ -1,14 +1,17 @@
-<p align="center"> 
-<a href="https://beerpay.io/Mark2Mark/Skedge"><img src="https://beerpay.io/Mark2Mark/Skedge/badge.svg" /></a>
-</p>
-<p align="center"> 
+<p align="center">
 <a href='https://ko-fi.com/M4M580HG' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi1.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 </p>
 
 # Skedge
 
-This is a plugin for the [Glyphs font editor](http://glyphsapp.com/).
+<img src="https://img.shields.io/badge/version%20-1.2.7-red.svg">
+<a href="https://glyphsapp.com/"><img src="https://img.shields.io/badge/environment%20-GlyphsApp-brightgreen.svg"></a>
+<img src="https://img.shields.io/badge/type%20-Plugin-blue.svg">
+<img src="https://img.shields.io/badge/python%20-2.7-blue.svg">
+<a href="http://ts-vanilla.readthedocs.io/en/latest/"><img src="https://img.shields.io/badge/dependencies%20-Vanilla-lightgray.svg"></a>
+<a href="http://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license%20-Apache 2.0-lightgray.svg"></a>
 
+---
 
 👉 Have you ever wanted to make a <a name="myfootnote1">reporter<sup>1</sup></a> plugin for Glyphs, but the developer kit and the plugin file structure looks too intimidating to you?
 👉 Maybe you’re never willing to get your head around it and skip developing even though you have great ideas you’d love to just sketch out.
@@ -33,9 +36,9 @@ A plugin which draws something to your active Edit Tab
 ---
 ### Example
 
-<p align="center"> 
+<p align="center">
 <img src="https://raw.githubusercontent.com/Mark2Mark/Skedge/master/Images/Skedge%2002.gif" alt="Skedge" height="">
-</p> 
+</p>
 
 ---
 ### How to use
@@ -47,7 +50,7 @@ A plugin which draws something to your active Edit Tab
 - If so, be sure to hit the “Run” button (or `Cmd+R` ) to run your code.
 - `Cmd+K` resets the drawing in your Edit Tab. The same happens when you close the window.
 - `Cmd+P` lets you print your code or save it as PDF.
-- Python etiquette: please use `TABS`! I’m not trying to force you into [that endless battle](https://stackoverflow.com/questions/119562/tabs-versus-spaces-in-python-programming), I just didn’t prepare the tool to deal with `SPACES` yet. Bear with me. BTW: f*** spaces! :D 
+- Python etiquette: please use `TABS`! I’m not trying to force you into [that endless battle](https://stackoverflow.com/questions/119562/tabs-versus-spaces-in-python-programming), I just didn’t prepare the tool to deal with `SPACES` yet. Bear with me. BTW: f*** spaces! :D
 - The code in “Skedge” can be almost exactly transferred into an actual reporter plugin. For this, don’t forget to build it as a `class` like the `glyphsReporter` do. You’ll have to instantiate and call it in your Skedge code, which you don’t have to do later in the Reporter Plugin.
 
 ---
@@ -113,7 +116,7 @@ for path in layer.paths:
 	bp = path.bezierPath
 	bp.fill()
 	bp.setLineWidth_(5/scale)
-	NSColor.redColor().set()	
+	NSColor.redColor().set()
 	bp.stroke()
 	for i, node in enumerate(path.nodes):
 		if i % 2:
