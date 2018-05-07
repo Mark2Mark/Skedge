@@ -11,6 +11,9 @@
 #	https://pythex.org/ REGEX Tester
 #	PyQT
 #
+#	TODO:
+#		+ NSLayoutManager addTemporaryAttributes ?
+#
 ###########################################################################################################
 
 
