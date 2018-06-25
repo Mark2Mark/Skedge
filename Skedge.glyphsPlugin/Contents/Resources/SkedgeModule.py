@@ -85,9 +85,28 @@ for path in layer.paths:
 #============
 
 def NSrgba_(*args):
-	return NSColor.colorWithCalibratedRed_green_blue_alpha_(*args)
+	#return NSColor.colorWithCalibratedRed_green_blue_alpha_(*args)
+	return NSColor.colorWithDeviceRed_green_blue_alpha_(*args) # more real colors
+	#return NSColor.colorWithRed_green_blue_alpha_(*args) # more real colors
 
 codeEditorFontSize = 14
+
+colorFraction = 255.0
+
+# Dark Scheme:
+selectionBGColor = NSrgba_(72/colorFraction, 76/colorFraction, 91/colorFraction, 1)
+selectionFGColor = NSColor.whiteColor()
+editorBGColor = NSrgba_(50/colorFraction, 53/colorFraction, 63/colorFraction, 1)
+editorTextColor = NSColor.whiteColor()
+syntaxConstantsColor = NSrgba_(245/colorFraction, 135/colorFraction, 126/colorFraction, 1)
+syntaxKeywordsColor = NSrgba_(222/colorFraction, 161/colorFraction, 243/colorFraction, 1)
+syntaxDigitsColor = NSrgba_(237/colorFraction, 219/colorFraction, 154/colorFraction, 1)
+syntaxSecondTextColor = NSrgba_(168/colorFraction, 236/colorFraction, 163/colorFraction, 1)
+syntaxCommentTextColor = NSrgba_(99/colorFraction, 104/colorFraction, 125/colorFraction, 1)
+syntaxPunctuationColor = NSrgba_(130/colorFraction, 189/colorFraction, 252/colorFraction, 1)
+caretColor = NSColor.redColor()
+# Light Scheme:
+'''
 selectionBGColor = NSrgba_(0.737, 0.914, 0, 0.5)
 selectionFGColor = NSColor.blackColor()
 editorBGColor = NSrgba_(1.0, 1.0, 1.0, 0.1)
@@ -96,8 +115,10 @@ syntaxConstantsColor = NSColor.redColor()
 syntaxKeywordsColor = NSrgba_(0.086, 0.58, 0.682, 1)
 syntaxDigitsColor = NSrgba_(0.74, 0.0, 0.0, 1)
 syntaxSecondTextColor = NSrgba_(0.4, 0.4, 0.4, 1)
+syntaxCommentTextColor = NSColor.grayColor()
 syntaxPunctuationColor = NSColor.orangeColor() # colorWithCalibratedRed_green_blue_alpha_(0, 0.77, 0.54, 1)
 caretColor = NSColor.redColor()
+'''
 
 buttonStyle = NSTexturedRoundedBezelStyle
 __METHOD__ = DRAWBACKGROUND # DRAWFOREGROUND
@@ -176,6 +197,17 @@ class CodeEditor(NSResponder):
 		self.textView.setUsesFindBar_( True )
 		self.textView.setTextContainerInset_( ((10, 15)) )
 		self.textView.turnOffLigatures_( True )
+
+		self.textView.setAutomaticDashSubstitutionEnabled_( False )
+		self.textView.setAutomaticDataDetectionEnabled_( False )
+		self.textView.setAutomaticLanguageIdentificationEnabled_( False )
+		self.textView.setAutomaticLinkDetectionEnabled_( False )
+		self.textView.setAutomaticQuoteSubstitutionEnabled_( False )
+		self.textView.setAutomaticSpellingCorrectionEnabled_( False )
+		self.textView.setAutomaticTextReplacementEnabled_( False )
+		self.textView.setSmartInsertDeleteEnabled_( False )
+
+		self.textView.setMenu_( None )
 
 
 		# Buttons
@@ -295,8 +327,8 @@ class CodeEditor(NSResponder):
 						else:
 							s, e = thisLineStart + self.charCount+1, foundLength+lenTillEOL
 							self.textView.setTextColor_range_(color, NSMakeRange(s, e) )
-						if color == NSColor.grayColor(): # Set Italic for comments:
-							setFontInRange( "IBMPlexMono-Italic", "Gintronic-Italic", "Menlo-Italic", (s, e) )
+						if color == syntaxCommentTextColor: # Set Italic for comments:
+							setFontInRange( "IBMPlexMono-LightItalic", "Gintronic-Italic", "Menlo-Italic", (s, e) )
 					except:
 						pass
 			except:
@@ -309,8 +341,8 @@ class CodeEditor(NSResponder):
 		#---------------------------------------------------
 
 		try:
-			self.textView.setTextColor_range_(NSColor.blackColor(), NSMakeRange(0, len(self.code))) # Reset first
-			setFontInRange( "IBMPlexMono", "Gintronic", "Menlo", (0, len(self.code)) ) # Reset first
+			self.textView.setTextColor_range_(editorTextColor, NSMakeRange(0, len(self.code))) # Reset first
+			setFontInRange( "IBMPlexMono-Light", "Gintronic", "Menlo", (0, len(self.code)) ) # Reset first
 
 			ranges = {}
 
@@ -333,7 +365,7 @@ class CodeEditor(NSResponder):
 				commentRE = "#[^\n]*"
 				if [m for m in re.finditer(commentRE, line)]:
 					try:
-						colorString( commentRE, line, NSColor.grayColor() )
+						colorString( commentRE, line, syntaxCommentTextColor )
 					except:
 						pass
 					self.charCount += len(line)
@@ -379,8 +411,8 @@ class CodeEditor(NSResponder):
 				if len(foundBC) > 0:
 					for m in re.finditer( re.escape(foundBC), self.code): # re.escape() to make special chars work (e.g. [] () * + ...)
 						bs, be = m.start(), len(foundBC)
-						self.textView.setTextColor_range_(NSColor.grayColor(), NSMakeRange(bs, be) )
-						setFontInRange( "IBMPlexMono-Italic", "Gintronic-Italic", "Menlo-Italic", (bs, be) )
+						self.textView.setTextColor_range_(syntaxCommentTextColor, NSMakeRange(bs, be) )
+						setFontInRange( "IBMPlexMono-LightItalic", "Gintronic-Italic", "Menlo-Italic", (bs, be) )
 			except:
 				pass # print traceback.format_exc()
 
