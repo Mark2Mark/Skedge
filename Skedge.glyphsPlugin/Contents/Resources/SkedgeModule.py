@@ -274,11 +274,13 @@ class CodeEditor(NSResponder):
 		# Helper
 		#-------
 
-		def setFontInRange(fontName, fallbackFontName, range):
+		def setFontInRange(fontName, fallbackFontName_1, fallbackFontName_2, range):
 			try:
 				self.textView.setFont_range_( NSFont.fontWithName_size_( fontName, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
 			except:
-				self.textView.setFont_range_( NSFont.fontWithName_size_( fallbackFontName, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
+				self.textView.setFont_range_( NSFont.fontWithName_size_( fallbackFontName_2, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
+			# finally:
+			# 	self.textView.setFont_range_( NSFont.fontWithName_size_( fallbackFontName_2, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
 
 
 		def colorString(searchItem, line, color, lenTillEOL=0, checkForPreceedingLetter=False):
@@ -294,7 +296,7 @@ class CodeEditor(NSResponder):
 							s, e = thisLineStart + self.charCount+1, foundLength+lenTillEOL
 							self.textView.setTextColor_range_(color, NSMakeRange(s, e) )
 						if color == NSColor.grayColor(): # Set Italic for comments:
-							setFontInRange( "Gintronic-Italic", "Menlo-Italic", (s, e) )
+							setFontInRange( "IBMPlexMono-Italic", "Gintronic-Italic", "Menlo-Italic", (s, e) )
 					except:
 						pass
 			except:
@@ -308,7 +310,7 @@ class CodeEditor(NSResponder):
 
 		try:
 			self.textView.setTextColor_range_(NSColor.blackColor(), NSMakeRange(0, len(self.code))) # Reset first
-			setFontInRange( "Gintronic", "Menlo", (0, len(self.code)) ) # Reset first
+			setFontInRange( "IBMPlexMono", "Gintronic", "Menlo", (0, len(self.code)) ) # Reset first
 
 			ranges = {}
 
@@ -378,7 +380,7 @@ class CodeEditor(NSResponder):
 					for m in re.finditer( re.escape(foundBC), self.code): # re.escape() to make special chars work (e.g. [] () * + ...)
 						bs, be = m.start(), len(foundBC)
 						self.textView.setTextColor_range_(NSColor.grayColor(), NSMakeRange(bs, be) )
-						setFontInRange( "Gintronic-Italic", "Menlo-Italic", (bs, be) )
+						setFontInRange( "IBMPlexMono-Italic", "Gintronic-Italic", "Menlo-Italic", (bs, be) )
 			except:
 				pass # print traceback.format_exc()
 
