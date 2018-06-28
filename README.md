@@ -163,6 +163,12 @@ for path in layer.paths:
 ```
 
 ---
+##### Important
+- Beta! Please backup your files. No guarantee for destroying your files.
+- Take care when doing transforms or things alike on your layer's bezierPath. Since it will actually adress the real path, be sure to make a `.copy()` of your layer before proceeding with those. If oyu’re just reading data and drawing new objects from that data, you should be fine.
+
+
+---
 ##### Known Issues
 
 - Once a script was opened via cmd+o, the floating window is not such anymore, it will always go the the background now when you click into the Edit Tab.
