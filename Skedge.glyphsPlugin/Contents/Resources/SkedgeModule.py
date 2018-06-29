@@ -343,7 +343,7 @@ class CodeEditor(NSResponder):
 		try:
 			# Reset Text Attributes from copied text (Thanks to Georg Seifert @schriftgestalt):
 			textStorage = self.textView.textStorage()
-			textStorage.setAttributes_range_(  {}, ( 0,textStorage.length() ))
+			textStorage.setAttributes_range_( {}, NSMakeRange( 0, textStorage.length() ) )
 
 			# Basic Reset:
 			self.textView.setTextColor_range_(editorTextColor, NSMakeRange(0, len(self.code))) # Reset first

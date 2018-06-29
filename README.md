@@ -176,7 +176,7 @@ for path in layer.paths:
 - ~~Some Plugins which add a DRAWBACKGROUND callback could interfere with this plugin and hence either or both fail to operate.~~ [Solved in Glyphs builds higher than around 1110]
 - Syntax Highlighting is yet very rudimentary. But waaay better than none.
 - Unfortunately It can fail to work in some environments. I witnessed one script executing fine on one computer and refusing to work on others without any tracebacks, error throws or console logs. Don’t panic and let me know. I’m happy to find the cause.
-- Copying code from certain sources can mess with the syntax highlighting. Maybe I got a severe setup issue with my self written syntax highlighting. Maybe `cmd`+`shift`-pasting helps.
+- ~~Copying code from certain sources can mess with the syntax highlighting. Maybe I got a severe setup issue with my self written syntax highlighting. Maybe `cmd`+`shift`-pasting helps.~~
 
 ---
 ##### TODO
