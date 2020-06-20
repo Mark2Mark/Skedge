@@ -17,6 +17,7 @@
 ###########################################################################################################
 
 
+from __future__ import print_function
 from Foundation import NSResponder, NSFileTypeForHFSTypeCode, NSRect
 from AppKit import NSBezierPath,\
 	NSColor,\
@@ -43,7 +44,7 @@ from AppKit import NSBezierPath,\
 	NSMakeRange,\
 	NSOpenPanel
 import traceback
-import re
+import re, objc
 from GlyphsApp import *
 
 
@@ -181,7 +182,7 @@ class CodeEditor(NSResponder):
 
 		# textView
 		#---------
-		self.w.textEditor = TextEditor((0, 0, -0, -40), templateCode, callback=self.doLiveCodeMode)
+		self.w.textEditor = TextEditor((0, 0, -0, -40), templateCode, callback=self.doLiveCodeMode_)
 		self.textView = self.w.textEditor._textView
 
 		self.textView.setTextColor_( editorTextColor )
@@ -213,14 +214,14 @@ class CodeEditor(NSResponder):
 		# Buttons
 		#--------
 		self.w.liveCode = CheckBox((10, -32, 80, 22), "Live", value=True)
-		self.w.runButton = Button((80+10, -32, -150-10, 22), u"Run ⌘R", callback=self.run)
+		self.w.runButton = Button((80+10, -32, -150-10, 22), u"Run ⌘R", callback=self.run_)
 		self.w.runButton._nsObject.setBezelStyle_( buttonStyle )
 		self.w.runButton.bind("r", ["command"])
-		self.w.resetButton = Button((-150+10, -32, -15, 22), u"Reset ⌘K", callback=self.reset)
+		self.w.resetButton = Button((-150+10, -32, -15, 22), u"Reset ⌘K", callback=self.reset_)
 		self.w.resetButton._nsObject.setBezelStyle_( buttonStyle )
 		self.w.resetButton.bind("k", ["command"])
 
-		self.w.bind("close", callback=self.onClose)
+		self.w.bind("close", callback=self.onClose_)
 		self.w.open()
 
 		# Enable the saveDocument_ & openDocument_ be
@@ -239,11 +240,11 @@ class CodeEditor(NSResponder):
 	def saveDocument_(self, sender):
 		# print "saveDocument_"
 		### Maybe store the file name and just write the file on the second run
-		self.saveFile(sender)
+		self.saveFile_(sender)
 
 	def openDocument_(self, sender):
 		# print "openDocument_"
-		self.openFile(sender)
+		self.openFile_(sender)
 
 
 	#==================
@@ -254,47 +255,48 @@ class CodeEditor(NSResponder):
 		try:
 			Glyphs.addCallback(self.drawCode, __METHOD__)
 		except:
-			print traceback.format_exc()
+			print(traceback.format_exc())
 
 	def removeCallback(self):
 		try:
 			Glyphs.removeCallback(self.drawCode, __METHOD__)
 		except:
-			print traceback.format_exc()
+			print(traceback.format_exc())
 
+	@objc.python_method
 	def drawCode(self, layer, info):
 		if self.code is not None:
 			try:
-				exec self.code
+				exec(self.code)
 				# Glyphs.clearLog() # Maybe better not.
 			except:
 				## This is the actual Code Log
 				## TODO: pass into own log window.
 				self.skedgeLog() # print traceback.format_exc()
 
-	def run(self, sender):
+	def run_(self, sender):
 		self.code = self.w.textEditor.get()
 		self.syntaxHighlighter()
 		Glyphs.redraw()
 
-	def reset(self, sender):
+	def reset_(self, sender):
 		self.code = None
 		Glyphs.redraw()
 
-	def onClose(self, sender):
+	def onClose_(self, sender):
 		self.removeCallback()
 
-	def doLiveCodeMode(self, sender):
+	def doLiveCodeMode_(self, sender):
 		self.liveCodeMode = self.w.liveCode.get()
 		if self.liveCodeMode == 1:
 			try:
-				self.run(sender)
+				self.run_(sender)
 			except:
 				self.skedgeLog() # print traceback.format_exc()
 
 	def skedgeLog(self):
 		# Glyphs.clearLog() # Maybe better not.
-		print traceback.format_exc()
+		print(traceback.format_exc())
 
 	def performClick(self):
 		self.w.runButton.getNSButton().performClick_(self.w.runButton.getNSButton())
@@ -433,7 +435,7 @@ class CodeEditor(NSResponder):
 	# O P E N   &   S A V E
 	#======================
 
-	def openFile(self, sender):
+	def openFile_(self, sender):
 		panel = NSOpenPanel.openPanel()
 		panel.setCanChooseFiles_( True )
 		panel.setCanChooseDirectories_( False )
@@ -454,7 +456,7 @@ class CodeEditor(NSResponder):
 			except:
 				self.skedgeLog()
 
-	def saveFile(self, sender):
+	def saveFile_(self, sender):
 		panel = NSSavePanel.savePanel()
 		panel.setMessage_( u"Save your Code as a .py file." )
 		panel.setTitle_( u"%s: Save File" % name )
