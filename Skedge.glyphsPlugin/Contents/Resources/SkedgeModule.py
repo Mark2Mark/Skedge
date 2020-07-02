@@ -44,7 +44,7 @@ from AppKit import NSBezierPath,\
 	NSMakeRange,\
 	NSOpenPanel
 import traceback
-import re, objc, os
+import re, objc, os, io
 from GlyphsApp import *
 
 
@@ -456,8 +456,8 @@ class CodeEditor(NSResponder):
 		if filePath is not None:
 			content = self.w.textEditor.get()
 			try:
-				with open(filePath, 'w+') as f:
-					f.writelines(content.encode("utf-8"))
+				with io.open(filePath, 'w+') as f:
+					f.write(content)
 			except:
 				Message("Could not save file.", "")
 
