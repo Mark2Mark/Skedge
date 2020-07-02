@@ -457,7 +457,7 @@ class CodeEditor(NSResponder):
 			content = self.w.textEditor.get()
 			try:
 				with open(filePath, 'w+') as f:
-					f.writelines(content)
+					f.writelines(content.encode("utf-8"))
 			except:
 				Message("Could not save file.", "")
 
