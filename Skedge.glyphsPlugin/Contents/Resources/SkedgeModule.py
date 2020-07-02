@@ -42,7 +42,8 @@ from AppKit import NSBezierPath,\
 	NSImageNameShareTemplate,\
 	NSSavePanel,\
 	NSMakeRange,\
-	NSOpenPanel
+	NSOpenPanel,\
+	NSModalResponseOK
 import traceback
 import re, objc
 from GlyphsApp import *
@@ -440,36 +441,42 @@ class CodeEditor(NSResponder):
 		panel.setCanChooseFiles_( True )
 		panel.setCanChooseDirectories_( False )
 		panel.setAllowsMultipleSelection_( False )
-		clicked = panel.runModalForDirectoryURL_file_types_relativeToWindow_( None, None, ["py"], self.w._window )
-		if clicked == 1: # 0=cancel, 1=OK
-			self.openFilePath = panel.URL().path() #or `.URLs()` if multiple files chosable
-			code = ""
-			with open(u"%s" % self.openFilePath) as f:
-				code = f.readlines()
-			try:
-				code = "".join(code)
-				self.w.textEditor.set(code)
-				self.performClick()
+		panel.setAllowedFileTypes_(["py"])
+		def handleOpenFile(modalResponse):
+			if modalResponse == NSModalResponseOK: # 0=cancel, 1=OK
+				self.openFilePath = panel.URL().path() #or `.URLs()` if multiple files chosable
+				code = ""
+				with open(u"%s" % self.openFilePath) as f:
+					code = f.readlines()
 				try:
-					self.w.setTitle("%s %s     [%s]" % (name, version, self.openFilePath.lastPathComponent()))
-				except: pass
-			except:
-				self.skedgeLog()
+					code = "".join(code)
+					self.w.textEditor.set(code)
+					self.performClick()
+					try:
+						self.w.setTitle("%s %s     [%s]" % (name, version, self.openFilePath.lastPathComponent()))
+					except: pass
+				except:
+					self.skedgeLog()
+		panel.beginSheetModalForWindow_completionHandler_(self.w._window, handleOpenFile)
+		
 
 	def saveFile_(self, sender):
 		panel = NSSavePanel.savePanel()
 		panel.setMessage_( u"Save your Code as a .py file." )
 		panel.setTitle_( u"%s: Save File" % name )
 		panel.setTagNames_( [u"Python", name] )
-		clicked = panel.runModalForDirectoryURL_file_types_relativeToWindow_( None, "%s - " % name, ["py"], self.w._window )
-		if clicked == 1: # 0=cancel, 1=OK
-			selectedFilePath = panel.URL().path()
-			content = self.w.textEditor.get()
-			try:
-				with open(selectedFilePath, 'w+') as f:
-					f.writelines(content)
-			except:
-				Message("Could not save file.", "")
+		panel.setAllowedFileTypes_(["py"])
+		panel.setNameFieldStringValue_("%s - " % name)
+		def handleSaveFile(modalResponse):
+			if modalResponse == NSModalResponseOK: # 0=cancel, 1=OK
+				selectedFilePath = panel.URL().path()
+				content = self.w.textEditor.get()
+				try:
+					with open(selectedFilePath, 'w+') as f:
+						f.writelines(content)
+				except:
+					Message("Could not save file.", "")
+		panel.beginSheetModalForWindow_completionHandler_(self.w._window, handleSaveFile)
 
 
 	#==========
