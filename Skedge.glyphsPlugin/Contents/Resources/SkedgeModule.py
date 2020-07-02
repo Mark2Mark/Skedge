@@ -44,7 +44,7 @@ from AppKit import NSBezierPath,\
 	NSMakeRange,\
 	NSOpenPanel
 import traceback
-import re, objc
+import re, objc, os
 from GlyphsApp import *
 
 
@@ -437,46 +437,29 @@ class CodeEditor(NSResponder):
 	#======================
 
 	def openFile_(self, sender):
-		panel = NSOpenPanel.openPanel()
-		panel.setCanChooseFiles_( True )
-		panel.setCanChooseDirectories_( False )
-		panel.setAllowsMultipleSelection_( False )
-		panel.setAllowedFileTypes_(["py"])
-		def handleOpenFile(modalResponse):
-			if modalResponse == 1: # 0=cancel, 1=OK
-				self.openFilePath = panel.URL().path() #or `.URLs()` if multiple files chosable
-				code = ""
-				with open(u"%s" % self.openFilePath) as f:
-					code = f.readlines()
+		filePath = GetOpenFile(message="Open a .py file.", filetypes=["py"])
+		if filePath is not None:
+			with open(filePath) as f:
+				code = f.readlines()
+			try:
+				code = "".join(code)
+				self.w.textEditor.set(code)
+				self.performClick()
 				try:
-					code = "".join(code)
-					self.w.textEditor.set(code)
-					self.performClick()
-					try:
-						self.w.setTitle("%s %s     [%s]" % (name, version, self.openFilePath.lastPathComponent()))
-					except: pass
-				except:
-					self.skedgeLog()
-		panel.beginSheetModalForWindow_completionHandler_(self.w._window, handleOpenFile)
-		
+					self.w.setTitle("%s %s     [%s]" % (name, version, filePath.lastPathComponent()))
+				except: pass
+			except:
+				self.skedgeLog()
 
 	def saveFile_(self, sender):
-		panel = NSSavePanel.savePanel()
-		panel.setMessage_( u"Save your Code as a .py file." )
-		panel.setTitle_( u"%s: Save File" % name )
-		panel.setTagNames_( [u"Python", name] )
-		panel.setAllowedFileTypes_(["py"])
-		panel.setNameFieldStringValue_("%s - " % name)
-		def handleSaveFile(modalResponse):
-			if modalResponse == 1: # 0=cancel, 1=OK
-				selectedFilePath = panel.URL().path()
-				content = self.w.textEditor.get()
-				try:
-					with open(selectedFilePath, 'w+') as f:
-						f.writelines(content)
-				except:
-					Message("Could not save file.", "")
-		panel.beginSheetModalForWindow_completionHandler_(self.w._window, handleSaveFile)
+		filePath = GetSaveFile(message="Save your Code as a .py file.", ProposedFileName="%s - " % name, filetypes=["py"])
+		if filePath is not None:
+			content = self.w.textEditor.get()
+			try:
+				with open(filePath, 'w+') as f:
+					f.writelines(content)
+			except:
+				Message("Could not save file.", "")
 
 
 	#==========
