@@ -78,7 +78,7 @@ for path in layer.paths:
 	for node in path.nodes:
 		badge(node.x, node.y, 15 / scale )
 """
-
+Glyphs.registerDefault("SkedgeCode", templateCode)
 
 
 
@@ -183,7 +183,7 @@ class CodeEditor(NSResponder):
 
 		# textView
 		#---------
-		self.w.textEditor = TextEditor((0, 0, -0, -40), templateCode, callback=self.doLiveCodeMode_)
+		self.w.textEditor = TextEditor((0, 0, -0, -40), Glyphs.defaults["SkedgeCode"], callback=self.doLiveCodeMode_)
 		self.textView = self.w.textEditor._textView
 
 		self.textView.setTextColor_( editorTextColor )
@@ -294,6 +294,7 @@ class CodeEditor(NSResponder):
 				self.run_(sender)
 			except:
 				self.skedgeLog() # print traceback.format_exc()
+		Glyphs.defaults["SkedgeCode"] = self.textView.string()
 
 	def skedgeLog(self):
 		# Glyphs.clearLog() # Maybe better not.
