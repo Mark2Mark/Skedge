@@ -165,7 +165,7 @@ for path in layer.paths:
 ---
 ##### Important
 - Beta! Please backup your files. No guarantee for destroying your files.
-- Take care when doing transforms or things alike on your layer's bezierPath. Since it will actually adress the real path, be sure to make a `.copy()` of your layer before proceeding with those. If oyu’re just reading data and drawing new objects from that data, you should be fine.
+- Take care when doing transforms or things alike on your layer's bezierPath. Since it will actually address the real path, be sure to make a `.copy()` of your layer before proceeding with those. If you’re just reading data and drawing new objects from that data, you should be fine.
 
 
 ---
@@ -187,7 +187,7 @@ for path in layer.paths:
 - [ ] Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later. (For instance calling some variables and functions `global`)
 - [ ] Provide more code snippets.
 - [ ] Sophisticated syntax highlighting.
-- [ ] Add liscence to Repo.
+- [ ] Add license to Repo.
 
 ---
 ##### Pull Requests
@@ -200,7 +200,7 @@ Feel free to comment or pull requests for any improvements.
 Copyright 2017 [Mark Frömberg](http://www.markfromberg.com/) *@Mark2Mark*
 
 Made possible with the [Glyphs SDK](https://github.com/schriftgestalt/GlyphsSDK) by Georg Seifert [(@schriftgestalt)](https://github.com/schriftgestalt) and Rainer Erich Scheichelbauer [(@mekkablue)](https://github.com/mekkablue).
-Thanks to Georg Seifert [(@schriftgestalt)](https://github.com/schriftgestalt) for streamlining and helping to make this tool still work after a lot of recent API cahnges!
+Thanks to Georg Seifert [(@schriftgestalt)](https://github.com/schriftgestalt) for streamlining and helping to make this tool still work after a lot of recent API changes!
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
