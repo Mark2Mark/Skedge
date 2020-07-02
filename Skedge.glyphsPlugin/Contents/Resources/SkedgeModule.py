@@ -42,8 +42,7 @@ from AppKit import NSBezierPath,\
 	NSImageNameShareTemplate,\
 	NSSavePanel,\
 	NSMakeRange,\
-	NSOpenPanel,\
-	NSModalResponseOK
+	NSOpenPanel
 import traceback
 import re, objc
 from GlyphsApp import *
@@ -444,7 +443,7 @@ class CodeEditor(NSResponder):
 		panel.setAllowsMultipleSelection_( False )
 		panel.setAllowedFileTypes_(["py"])
 		def handleOpenFile(modalResponse):
-			if modalResponse == NSModalResponseOK: # 0=cancel, 1=OK
+			if modalResponse == 1: # 0=cancel, 1=OK
 				self.openFilePath = panel.URL().path() #or `.URLs()` if multiple files chosable
 				code = ""
 				with open(u"%s" % self.openFilePath) as f:
@@ -469,7 +468,7 @@ class CodeEditor(NSResponder):
 		panel.setAllowedFileTypes_(["py"])
 		panel.setNameFieldStringValue_("%s - " % name)
 		def handleSaveFile(modalResponse):
-			if modalResponse == NSModalResponseOK: # 0=cancel, 1=OK
+			if modalResponse == 1: # 0=cancel, 1=OK
 				selectedFilePath = panel.URL().path()
 				content = self.w.textEditor.get()
 				try:
