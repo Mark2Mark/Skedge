@@ -209,8 +209,3 @@ You may obtain a copy of the License at
 http://www.apache.org/licenses/LICENSE-2.0
 
 See the License file included in this repository for further details.
-
-## Support on Beerpay
-Hey dude! Help me out for a couple of :beers:!
-
-[![Beerpay](https://beerpay.io/Mark2Mark/Skedge/badge.svg?style=beer-square)](https://beerpay.io/Mark2Mark/Skedge)  [![Beerpay](https://beerpay.io/Mark2Mark/Skedge/make-wish.svg?style=flat-square)](https://beerpay.io/Mark2Mark/Skedge?focus=wish)
