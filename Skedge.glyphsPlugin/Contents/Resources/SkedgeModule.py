@@ -159,7 +159,7 @@ commentTrigger = u"#"
 # M A I N
 #========
 
-from vanilla import *
+from vanilla import FloatingWindow, TextEditor, CheckBox, Button
 
 class CodeEditor(NSResponder):
 
