@@ -431,9 +431,9 @@ class CodeEditor(NSResponder):
 				colorString( r"(\"|\')(.*?)(\"|\')", line, syntaxStringFGColor ) # same, but foreground
 
 				# AppKit Stuff
-				colorString( r"(?=NS)(.*?)\.", line, syntaxClassesColor, trim=True ) # e.g NSColor (only if prececed by .)
+				colorString( r"(?<![a-zA-Z])(?=NS)(.*?)\.", line, syntaxClassesColor, trim=True ) # e.g NSColor (only if followed by . and if not preceeded by a letter)
 				# GlyphsApp
-				colorString( r"(?=GS)(.*?)\.", line, syntaxClassesColor, trim=True ) # e.g GSFont (only if prececed by .)
+				colorString( r"(?<![a-zA-Z])(?=GS)(.*?)\.", line, syntaxClassesColor, trim=True ) # e.g GSFont (only if followed by . and if not preceeded by a letter) # (?=GS)(.*?)\.
 
 				for glyphsAppInternal in glyphsAppInternals:
 					colorString( r"(?<![a-zA-Z])%s" % glyphsAppInternal, line, syntaxClassesColor ) # explicit words, not predceeded by any letter
