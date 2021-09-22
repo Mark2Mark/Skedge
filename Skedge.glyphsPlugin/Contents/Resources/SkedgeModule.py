@@ -393,7 +393,7 @@ class CodeEditor(NSResponder):
 				# ALL THE REST
 				#-------------
 				# else:
-				colorString( r"\d+", line, syntaxDigitsColor,checkForPreceedingLetter=True )
+				colorString( r"(?<![a-zA-Z_])\d+", line, syntaxDigitsColor,checkForPreceedingLetter=True ) # digits, if not preceeded by letter or underscore
 				colorString( r"[\*\+\-\/\=\!\>\<\%\&]", line, syntaxKeywordsColor )
 				colorString( r"[\(\)\{\}\[\]]", line, syntaxSecondTextColor )
 				colorString( r"[\;\:\,]", line, syntaxPunctuationColor )
