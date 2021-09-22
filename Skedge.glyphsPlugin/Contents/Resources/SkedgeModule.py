@@ -105,6 +105,7 @@ syntaxSecondTextColor =  NSColor.colorWithHue_saturation_brightness_alpha_(0.45,
 syntaxCommentTextColor = editorTextColor.colorWithAlphaComponent_(0.4)
 syntaxStringBGColor =    NSColor.colorWithHue_saturation_brightness_alpha_(0.55, 0.9, 0.9, 0.1)
 syntaxStringFGColor =    NSColor.colorWithHue_saturation_brightness_alpha_(0.55, 0.7, 1.0, 1.0)
+syntaxClassesColor =     NSColor.colorWithHue_saturation_brightness_alpha_(0.25, 0.5, 1.0, 1.0)
 syntaxPunctuationColor = NSColor.colorWithHue_saturation_brightness_alpha_(0.55, 1.0, 0.8, 1.0)
 caretColor =             NSColor.redColor()
 # Light Scheme:
@@ -153,6 +154,19 @@ keywordsWithSpaces = [u" in ", u" and ", u" not ", u" is ", u" or ", u" raise ",
 keywordsWithoutSpace = [u"try:", u"except:", u"finally:", u"else:", u"\%s", ] # Period not implemented
 constants = [u"True", u"False", u"None", u"self", u"break", u"pass", u"return", u"continue", ]
 commentTrigger = u"#"
+glyphsAppInternals = ["Glyphs", "GlyphsApp", "Font", "Layer"]
+glyphsAppConstants = ["MOVE", "LINE", "CURVE", "OFFCURVE", "QCURVE", "HOBBYCURVE", "GSMOVE", "GSLINE", "GSCURVE", "GSQCURVE", "GSOFFCURVE", "GSHOBBYCURVE", "GSSHARP", "GSSMOOTH",
+	"FILL", "FILLCOLOR", "FILLPATTERNANGLE", "FILLPATTERNBLENDMODE", "FILLPATTERNFILE", "FILLPATTERNOFFSET", "FILLPATTERNSCALE", "STROKECOLOR", "STROKELINECAPEND", "STROKELINECAPSTART", "STROKELINEJOIN", "STROKEPOSITION", "STROKEWIDTH", "GRADIENT", "SHADOW", "INNERSHADOW", "MASK", 
+	"INSTANCETYPESINGLE", "INSTANCETYPEVARIABLE",
+	"TAG", "TOPGHOST", "STEM", "BOTTOMGHOST", "FLEX", "TTSNAP", "TTSTEM", "TTSHIFT", "TTINTERPOLATE", "TTDIAGONAL", "TTDELTA", "CORNER", "CAP", "TTDONTROUND", "TTROUND", "TTROUNDUP", "TTROUNDDOWN", "TRIPLE",
+	"TTANCHOR", "TTALIGN", # backwards compatibilty 
+	"TEXT", "ARROW", "CIRCLE", "PLUS", "MINUS",
+	"LTR", "RTL", "LTRTTB", "RTLTTB", "GSTopLeft", "GSTopCenter", "GSTopRight", "GSCenterLeft", "GSCenterCenter", "GSCenterRight", "GSBottomLeft", "GSBottomCenter", "GSBottomRight",
+]
+glyphsAppCallbacks = [
+	"DRAWFOREGROUND", "DRAWBACKGROUND", "DRAWINACTIVE", "DOCUMENTOPENED", "DOCUMENTACTIVATED", "DOCUMENTWASSAVED", "DOCUMENTEXPORTED", "DOCUMENTCLOSED", "DOCUMENTWILLCLOSE", "DOCUMENTDIDCLOSE", "TABDIDOPEN", "TABWILLCLOSE", "UPDATEINTERFACE",
+	"MOUSEMOVED", "MOUSEDRAGGED", "MOUSEDOWN", "MOUSEUP", "CONTEXTMENUCALLBACK",
+]
 
 
 
@@ -415,6 +429,18 @@ class CodeEditor(NSResponder):
 				# colorString( r"(?<=\")(.*?)(?=\")", line, syntaxStringBGColor, background=True ) # strings between " ... " or ' ... ' excluding quotes
 				colorString( r"(\"|\')(.*?)(\"|\')", line, syntaxStringBGColor, background=True ) # strings between " ... " or ' ... ' including quotes. Nicer than excluding quotes
 				colorString( r"(\"|\')(.*?)(\"|\')", line, syntaxStringFGColor ) # same, but foreground
+
+				# AppKit Stuff
+				colorString( r"(?=NS)(.*?)\.", line, syntaxClassesColor, trim=True ) # e.g NSColor (only if prececed by .)
+				# GlyphsApp
+				colorString( r"(?=GS)(.*?)\.", line, syntaxClassesColor, trim=True ) # e.g GSFont (only if prececed by .)
+
+				for glyphsAppInternal in glyphsAppInternals:
+					colorString( r"(?<![a-zA-Z])%s" % glyphsAppInternal, line, syntaxClassesColor ) # explicit words, not predceeded by any letter
+				for glyphsAppConstant in glyphsAppConstants:
+					colorString( r"(?<![a-zA-Z])%s" % glyphsAppConstant, line, syntaxClassesColor ) # explicit words, not predceeded by any letter					
+				for glyphsAppCallback in glyphsAppCallbacks:
+					colorString( r"(?<![a-zA-Z])%s" % glyphsAppCallback, line, syntaxClassesColor ) # explicit words, not predceeded by any letter					
 
 				self.charCount += len(line) # Do this AFTER Applying the range. We count the Lines UP to the currently checked one and add this to the found start
 
