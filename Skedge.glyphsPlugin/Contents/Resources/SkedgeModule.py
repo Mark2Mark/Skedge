@@ -22,6 +22,7 @@ from Foundation import NSResponder, NSFileTypeForHFSTypeCode, NSRect
 from AppKit import NSBezierPath,\
 	NSColor,\
 	NSFont,\
+	NSFontWeightRegular,\
 	NSBackgroundColorAttributeName,\
 	NSForegroundColorAttributeName,\
 	NSMutableParagraphStyle,\
@@ -50,10 +51,8 @@ from GlyphsApp import *
 
 name = "Skedge"
 author = u"Mark Frömberg"
-year = "2017"
-version = "1.2.7"
+version = "1.2.9"
 releaseDate = "2017-10-25"
-versionDate = "2018-02-17"
 
 
 #================
@@ -309,14 +308,15 @@ class CodeEditor(NSResponder):
 		# Helper
 		#-------
 
-		def setFontInRange(fontName, fallbackFontName_1, fallbackFontName_2, range):
+		def setFontInRange(range):
 			try:
-				self.textView.setFont_range_( NSFont.fontWithName_size_( fontName, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
+				try:
+					font = NSFont.fontWithName_size_("Neutronic Mono v0.2.3 Light", codeEditorFontSize)
+				except:
+					font = NSFont.monospacedSystemFontOfSize_weight_(codeEditorFontSize, NSFontWeightRegular)
 			except:
-				self.textView.setFont_range_( NSFont.fontWithName_size_( fallbackFontName_2, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
-			# finally:
-			# 	self.textView.setFont_range_( NSFont.fontWithName_size_( fallbackFontName_2, codeEditorFontSize ), NSMakeRange(range[0], range[1]) )
-
+				font = NSFont.userFixedPitchFontOfSize_(codeEditorFontSize)
+			self.textView.setFont_range_(font, NSMakeRange(range[0], range[1]) )
 
 		def colorString(searchItem, line, color, lenTillEOL=0, checkForPreceedingLetter=False):
 			try:
@@ -331,7 +331,7 @@ class CodeEditor(NSResponder):
 							s, e = thisLineStart + self.charCount+1, foundLength+lenTillEOL
 							self.textView.setTextColor_range_(color, NSMakeRange(s, e) )
 						if color == syntaxCommentTextColor: # Set Italic for comments:
-							setFontInRange( "IBMPlexMono-LightItalic", "Gintronic-Italic", "Menlo-Italic", (s, e) )
+							setFontInRange((s, e))
 					except:
 						pass
 			except:
@@ -342,7 +342,8 @@ class CodeEditor(NSResponder):
 		#---------------------------------------------------
 		# Main
 		#---------------------------------------------------
-
+		commentRE = "#[^\n]*"
+		comments = []
 		try:
 			# Reset Text Attributes from copied text (Thanks to Georg Seifert @schriftgestalt):
 			textStorage = self.textView.textStorage()
@@ -350,7 +351,7 @@ class CodeEditor(NSResponder):
 
 			# Basic Reset:
 			self.textView.setTextColor_range_(editorTextColor, NSMakeRange(0, len(self.code))) # Reset first
-			setFontInRange( "IBMPlexMono-Light", "Gintronic", "Menlo", (0, len(self.code)) ) # Reset first
+			setFontInRange((0, len(self.code))) # Reset first
 
 			ranges = {}
 
@@ -363,42 +364,40 @@ class CodeEditor(NSResponder):
 				else:
 					self.charCount -= 1
 
-				# COMMENTS
-				#---------
-				# TODO:
-				#	+ This if/else causes highlighting BEFORE comments not to work.
-				# 	  Perhaps it works if comments get a second loop over all lines
-				# 	  after the highlighting is done.
-				# from `#` up to newLine
-				commentRE = "#[^\n]*"
-				if [m for m in re.finditer(commentRE, line)]:
-					try:
-						colorString( commentRE, line, syntaxCommentTextColor )
-					except:
-						pass
-					self.charCount += len(line)
+
 
 
 
 				# ALL THE REST
 				#-------------
-				else:
-					colorString( r"\d+", line, syntaxDigitsColor,checkForPreceedingLetter=True )
-					colorString( r"[\*\+\-\/\=\!\>\<\%\&]", line, syntaxKeywordsColor )
-					colorString( r"[\(\)\{\}\[\]]", line, syntaxSecondTextColor )
-					colorString( r"[\;\:\,]", line, syntaxPunctuationColor )
-					colorString( r"\.", line, syntaxSecondTextColor )
+				# else:
+				colorString( r"\d+", line, syntaxDigitsColor,checkForPreceedingLetter=True )
+				colorString( r"[\*\+\-\/\=\!\>\<\%\&]", line, syntaxKeywordsColor )
+				colorString( r"[\(\)\{\}\[\]]", line, syntaxSecondTextColor )
+				colorString( r"[\;\:\,]", line, syntaxPunctuationColor )
+				colorString( r"\.", line, syntaxSecondTextColor )
 
-					for kWord in keywordsWithSpace:
-						colorString( kWord, line, syntaxKeywordsColor )
-					for kWord in keywordsWithoutSpace:
-						colorString( kWord, line, syntaxKeywordsColor )
-					for kWord in keywordsWithSpaces:
-						colorString( kWord, line, syntaxKeywordsColor )
-					for kWord in constants:
-						colorString( kWord, line, syntaxConstantsColor )
+				for kWord in keywordsWithSpace:
+					colorString( kWord, line, syntaxKeywordsColor )
+				for kWord in keywordsWithoutSpace:
+					colorString( kWord, line, syntaxKeywordsColor )
+				for kWord in keywordsWithSpaces:
+					colorString( kWord, line, syntaxKeywordsColor )
+				for kWord in constants:
+					colorString( kWord, line, syntaxConstantsColor )
 
-					self.charCount += len(line) # Do this AFTER Applying the range. We count the Lines UP to the currently checked one and add this to the found start
+				# COMMENTS
+				#---------
+				# from `#` up to newLine
+				for m in re.finditer(commentRE, line):
+					try:
+						s, e = m.start(), m.end()
+						mm = m.group()
+						comments.append(NSMakeRange(s+self.charCount +1, e-s)) # instead of appending mm, use the range directly
+					except:
+						pass
+
+				self.charCount += len(line) # Do this AFTER Applying the range. We count the Lines UP to the currently checked one and add this to the found start
 
 
 			# BLOCK COMMENTS
@@ -420,16 +419,22 @@ class CodeEditor(NSResponder):
 					for m in re.finditer( re.escape(foundBC), self.code): # re.escape() to make special chars work (e.g. [] () * + ...)
 						bs, be = m.start(), len(foundBC)
 						self.textView.setTextColor_range_(syntaxCommentTextColor, NSMakeRange(bs, be) )
-						setFontInRange( "IBMPlexMono-LightItalic", "Gintronic-Italic", "Menlo-Italic", (bs, be) )
+						setFontInRange((bs, be))
 			except:
 				pass # print traceback.format_exc()
-
 
 
 
 		except:
 			self.skedgeLog() # print traceback.format_exc()
 			# console.log( traceback.format_exc() )
+		
+		for comment in comments:
+			#range = self.textView.string().rangeOfString_(comment) # could be slower, so we use the range isntead of the string
+			try:
+				self.textView.setTextColor_range_(syntaxCommentTextColor, comment )
+			except:
+				pass
 
 
 	#======================
