@@ -403,7 +403,8 @@ class CodeEditor(NSResponder):
 				# not quite: r"\.(.*?)\("
 				# look around https://stackoverflow.com/questions/3926451/how-to-match-but-not-capture-part-of-a-regex
 				# colorString( r"(?<=\.)(.*?)(?=\()", line, syntaxMethodColor ) # Between . and (
-				colorString( r"(?<=\.)([a-zA-Z_]*?)(?=\(|\))", line, syntaxMethodColor ) # any of these a-zA-Z_ between . and ( or )
+				#colorString( r"(?<=\.|\s)([a-zA-Z+_]*?)(?=\(|\))", line, syntaxMethodColor ) # any of these a-zA-Z_ between `.` or `space` and `(` or `)`, any amount of `_` in name
+				colorString( r"(?<=\.|\s)([a-zA-Z0-9_]*?)(?=\()", line, syntaxMethodColor ) # any of these a-zA-Z_ between `.` or `space` and `(` or `)`, any amount of `_` in name
 				#
 				
 				for kWord in keywordsWithSpace:
