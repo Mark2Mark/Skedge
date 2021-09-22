@@ -115,20 +115,7 @@ syntaxStringFGColor =    NSColor.colorWithHue_saturation_brightness_alpha_(0.55,
 syntaxClassesColor =     NSColor.colorWithHue_saturation_brightness_alpha_(0.25, 0.5, 1.0, 1.0)
 syntaxPunctuationColor = NSColor.colorWithHue_saturation_brightness_alpha_(0.55, 1.0, 0.8, 1.0)
 caretColor =             NSColor.redColor()
-# Light Scheme:
-'''
-selectionBGColor = NSrgba_(0.737, 0.914, 0, 0.5)
-selectionFGColor = NSColor.blackColor()
-editorBGColor = NSrgba_(1.0, 1.0, 1.0, 0.1)
-editorTextColor = NSColor.blackColor()
-syntaxConstantsColor = NSColor.redColor()
-syntaxKeywordsColor = NSrgba_(0.086, 0.58, 0.682, 1)
-syntaxDigitsColor = NSrgba_(0.74, 0.0, 0.0, 1)
-syntaxSecondTextColor = NSrgba_(0.4, 0.4, 0.4, 1)
-syntaxCommentTextColor = NSColor.grayColor()
-syntaxPunctuationColor = NSColor.orangeColor() # colorWithCalibratedRed_green_blue_alpha_(0, 0.77, 0.54, 1)
-caretColor = NSColor.redColor()
-'''
+
 
 buttonStyle = NSTexturedRoundedBezelStyle
 __METHOD__ = DRAWBACKGROUND # DRAWFOREGROUND
