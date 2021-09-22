@@ -94,17 +94,19 @@ codeEditorFontSize = 14
 colorFraction = 255.0
 
 # Dark Scheme:
-selectionBGColor = NSrgba_(72/colorFraction, 76/colorFraction, 91/colorFraction, 1)
-selectionFGColor = NSColor.whiteColor()
-editorBGColor = NSrgba_(50/colorFraction, 53/colorFraction, 63/colorFraction, 1)
-editorTextColor = NSColor.whiteColor()
-syntaxConstantsColor = NSrgba_(245/colorFraction, 135/colorFraction, 126/colorFraction, 1)
-syntaxKeywordsColor = NSrgba_(222/colorFraction, 161/colorFraction, 243/colorFraction, 1)
-syntaxDigitsColor = NSrgba_(237/colorFraction, 219/colorFraction, 154/colorFraction, 1)
-syntaxSecondTextColor = NSrgba_(168/colorFraction, 236/colorFraction, 163/colorFraction, 1)
-syntaxCommentTextColor = NSrgba_(99/colorFraction, 104/colorFraction, 125/colorFraction, 1)
-syntaxPunctuationColor = NSrgba_(130/colorFraction, 189/colorFraction, 252/colorFraction, 1)
-caretColor = NSColor.redColor()
+selectionBGColor =       NSrgba_(72/colorFraction, 76/colorFraction, 91/colorFraction, 1)
+editorBGColor =          NSrgba_(50/colorFraction, 53/colorFraction, 63/colorFraction, 1)
+editorTextColor =        NSColor.colorWithHue_saturation_brightness_alpha_(0, 0, 1, 0.8)
+syntaxConstantsColor =   NSrgba_(245/colorFraction, 135/colorFraction, 126/colorFraction, 1)
+syntaxKeywordsColor =    NSColor.colorWithHue_saturation_brightness_alpha_(0.90, 0.6, 1.0, 1) # NSrgba_(222/colorFraction, 161/colorFraction, 243/colorFraction, 1)
+syntaxDigitsColor =      NSColor.colorWithHue_saturation_brightness_alpha_(0.13, 0.6, 0.9, 1)
+syntaxMethodColor =      NSColor.colorWithHue_saturation_brightness_alpha_(0.35, 0.2, 0.9, 1)
+syntaxSecondTextColor =  NSColor.colorWithHue_saturation_brightness_alpha_(0.45, 0.9, 0.9, 1)
+syntaxCommentTextColor = editorTextColor.colorWithAlphaComponent_(0.4)
+syntaxStringBGColor =    NSColor.colorWithHue_saturation_brightness_alpha_(0.55, 0.9, 0.9, 0.1)
+syntaxStringFGColor =    NSColor.colorWithHue_saturation_brightness_alpha_(0.55, 0.7, 1.0, 1.0)
+syntaxPunctuationColor = NSColor.colorWithHue_saturation_brightness_alpha_(0.55, 1.0, 0.8, 1.0)
+caretColor =             NSColor.redColor()
 # Light Scheme:
 '''
 selectionBGColor = NSrgba_(0.737, 0.914, 0, 0.5)
@@ -192,7 +194,7 @@ class CodeEditor(NSResponder):
 		self.texteEditorScrollView = self.w.textEditor._nsObject
 		textSelection = {}
 		textSelection[NSBackgroundColorAttributeName] = selectionBGColor
-		textSelection[NSForegroundColorAttributeName] = selectionFGColor
+		# textSelection[NSForegroundColorAttributeName] = selectionFGColor
 		self.textView.setSelectedTextAttributes_( textSelection )
 		self.textView.setUsesFindBar_( True )
 		self.textView.setTextContainerInset_( ((10, 15)) )
@@ -310,15 +312,16 @@ class CodeEditor(NSResponder):
 
 		def setFontInRange(range):
 			try:
-				try:
-					font = NSFont.fontWithName_size_("Neutronic Mono v0.2.3 Light", codeEditorFontSize)
-				except:
-					font = NSFont.monospacedSystemFontOfSize_weight_(codeEditorFontSize, NSFontWeightRegular)
+				#try:
+				#	font = NSFont.fontWithName_size_("Neutronic Mono v0.2.3 Normal", codeEditorFontSize)
+				#except:
+				#	font = NSFont.monospacedSystemFontOfSize_weight_(codeEditorFontSize, NSFontWeightRegular)
+				font = NSFont.monospacedSystemFontOfSize_weight_(codeEditorFontSize, NSFontWeightRegular)
 			except:
 				font = NSFont.userFixedPitchFontOfSize_(codeEditorFontSize)
 			self.textView.setFont_range_(font, NSMakeRange(range[0], range[1]) )
 
-		def colorString(searchItem, line, color, lenTillEOL=0, checkForPreceedingLetter=False):
+		def colorString(searchItem, line, color, lenTillEOL=0, checkForPreceedingLetter=False, trim=False, background=False):
 			try:
 				for m in re.finditer(searchItem, line):
 					startInLine = m.start()
@@ -329,7 +332,12 @@ class CodeEditor(NSResponder):
 							pass
 						else:
 							s, e = thisLineStart + self.charCount+1, foundLength+lenTillEOL
-							self.textView.setTextColor_range_(color, NSMakeRange(s, e) )
+							if trim:
+								e -= 1
+							if background:
+								self.textView.attributedString().addAttribute_value_range_(NSBackgroundColorAttributeName, color, NSMakeRange(s, e))
+							else:
+								self.textView.setTextColor_range_(color, NSMakeRange(s, e) )
 						if color == syntaxCommentTextColor: # Set Italic for comments:
 							setFontInRange((s, e))
 					except:
@@ -377,10 +385,17 @@ class CodeEditor(NSResponder):
 				colorString( r"[\;\:\,]", line, syntaxPunctuationColor )
 				colorString( r"\.", line, syntaxSecondTextColor )
 
+				# Method Calls
+				# not quite: r"\.(.*?)\("
+				# look around https://stackoverflow.com/questions/3926451/how-to-match-but-not-capture-part-of-a-regex
+				# colorString( r"(?<=\.)(.*?)(?=\()", line, syntaxMethodColor ) # Between . and (
+				colorString( r"(?<=\.)([a-zA-Z_]*?)(?=\(|\))", line, syntaxMethodColor ) # any of these a-zA-Z_ between . and ( or )
+				#
+				
 				for kWord in keywordsWithSpace:
 					colorString( kWord, line, syntaxKeywordsColor )
 				for kWord in keywordsWithoutSpace:
-					colorString( kWord, line, syntaxKeywordsColor )
+					colorString( kWord, line, syntaxKeywordsColor, trim=True )
 				for kWord in keywordsWithSpaces:
 					colorString( kWord, line, syntaxKeywordsColor )
 				for kWord in constants:
@@ -396,6 +411,10 @@ class CodeEditor(NSResponder):
 						comments.append(NSMakeRange(s+self.charCount +1, e-s)) # instead of appending mm, use the range directly
 					except:
 						pass
+				
+				# colorString( r"(?<=\")(.*?)(?=\")", line, syntaxStringBGColor, background=True ) # strings between " ... " or ' ... ' excluding quotes
+				colorString( r"(\"|\')(.*?)(\"|\')", line, syntaxStringBGColor, background=True ) # strings between " ... " or ' ... ' including quotes. Nicer than excluding quotes
+				colorString( r"(\"|\')(.*?)(\"|\')", line, syntaxStringFGColor ) # same, but foreground
 
 				self.charCount += len(line) # Do this AFTER Applying the range. We count the Lines UP to the currently checked one and add this to the found start
 
