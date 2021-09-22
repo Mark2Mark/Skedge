@@ -27,6 +27,15 @@ from AppKit import NSBezierPath,\
 	NSForegroundColorAttributeName,\
 	NSMutableParagraphStyle,\
 	NSNoBorder,\
+	NSFloatingWindowLevel,\
+	NSWindowStyleMaskFullSizeContentView,\
+	NSTitledWindowMask,\
+	NSClosableWindowMask,\
+	NSMiniaturizableWindowMask,\
+	NSResizableWindowMask,\
+	NSWindowCollectionBehaviorManaged,\
+	NSAppearance,\
+	NSAppearanceNameVibrantDark,\
 	NSPrintOperation,\
 	NSRoundRectBezelStyle,\
 	NSRecessedBezelStyle,\
@@ -85,9 +94,7 @@ Glyphs.registerDefault("SkedgeCode", templateCode)
 #============
 
 def NSrgba_(*args):
-	#return NSColor.colorWithCalibratedRed_green_blue_alpha_(*args)
 	return NSColor.colorWithDeviceRed_green_blue_alpha_(*args) # more real colors
-	#return NSColor.colorWithRed_green_blue_alpha_(*args) # more real colors
 
 codeEditorFontSize = 14
 
@@ -95,7 +102,7 @@ colorFraction = 255.0
 
 # Dark Scheme:
 selectionBGColor =       NSrgba_(72/colorFraction, 76/colorFraction, 91/colorFraction, 1)
-editorBGColor =          NSrgba_(50/colorFraction, 53/colorFraction, 63/colorFraction, 1)
+editorBGColor =          NSColor.colorWithHue_saturation_brightness_alpha_(0.6, 0.4, 0.22, 1.0) # nice GlyphsApp dark green: 0.5, 0.4, 0.22 # 0.785, 0.2, 0.225, #NSrgba_(50/colorFraction, 53/colorFraction, 63/colorFraction, 1) # rgb % 18 24 27
 editorTextColor =        NSColor.colorWithHue_saturation_brightness_alpha_(0, 0, 1, 0.8)
 syntaxConstantsColor =   NSrgba_(245/colorFraction, 135/colorFraction, 126/colorFraction, 1)
 syntaxKeywordsColor =    NSColor.colorWithHue_saturation_brightness_alpha_(0.90, 0.6, 1.0, 1) # NSrgba_(222/colorFraction, 161/colorFraction, 243/colorFraction, 1)
@@ -174,7 +181,7 @@ glyphsAppCallbacks = [
 # M A I N
 #========
 
-from vanilla import FloatingWindow, TextEditor, CheckBox, Button
+from vanilla import Window, FloatingWindow, TextEditor, CheckBox, Button
 
 class CodeEditor(NSResponder):
 
@@ -194,6 +201,15 @@ class CodeEditor(NSResponder):
 		self.liveCodeMode = 0
 		self.openFilePath = None
 		self.w = FloatingWindow((800, 600), minSize=(400, 400), title="%s %s" % (name, version), autosaveName="%s.mainwindow" % self.vID ) ## restore window position
+		nsWindow = self.w.getNSWindow()
+		# nsWindow.setLevel_(NSFloatingWindowLevel)
+		# nsWindow.setCollectionBehavior_(NSWindowCollectionBehaviorManaged )
+		nsWindow.setStyleMask_(NSWindowStyleMaskFullSizeContentView | NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask)
+		nsWindow.setAppearance_(NSAppearance.appearanceNamed_(NSAppearanceNameVibrantDark))
+		nsWindow.setTitlebarAppearsTransparent_(1)
+		nsWindow.setBackgroundColor_( editorBGColor )
+		
+		
 
 		# textView
 		#---------
@@ -211,7 +227,7 @@ class CodeEditor(NSResponder):
 		# textSelection[NSForegroundColorAttributeName] = selectionFGColor
 		self.textView.setSelectedTextAttributes_( textSelection )
 		self.textView.setUsesFindBar_( True )
-		self.textView.setTextContainerInset_( ((10, 15)) )
+		self.textView.setTextContainerInset_( ((20, 20)) )
 		self.textView.turnOffLigatures_( True )
 
 		self.textView.setAutomaticDashSubstitutionEnabled_( False )
