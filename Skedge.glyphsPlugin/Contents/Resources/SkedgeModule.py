@@ -437,11 +437,11 @@ class CodeEditor(NSResponder):
 				colorString( r"(?<![a-zA-Z])(?=GS)(.*?)\.", line, syntaxClassesColor, trim=True ) # e.g GSFont (only if followed by . and if not preceeded by a letter) # (?=GS)(.*?)\.
 
 				for glyphsAppInternal in glyphsAppInternals:
-					colorString( r"(?<![a-zA-Z])%s" % glyphsAppInternal, line, syntaxClassesColor ) # explicit words, not predceeded by any letter
+					colorString( r"(?<![a-zA-Z])%s(?![a-zA-Z])" % glyphsAppInternal, line, syntaxClassesColor ) # explicit words, not predceeded and followed by any letter
 				for glyphsAppConstant in glyphsAppConstants:
-					colorString( r"(?<![a-zA-Z])%s" % glyphsAppConstant, line, syntaxClassesColor ) # explicit words, not predceeded by any letter					
+					colorString( r"(?<![a-zA-Z])%s(?![a-zA-Z])" % glyphsAppConstant, line, syntaxClassesColor ) # explicit words, not predceeded and followed by any letter					
 				for glyphsAppCallback in glyphsAppCallbacks:
-					colorString( r"(?<![a-zA-Z])%s" % glyphsAppCallback, line, syntaxClassesColor ) # explicit words, not predceeded by any letter					
+					colorString( r"(?<![a-zA-Z])%s(?![a-zA-Z])" % glyphsAppCallback, line, syntaxClassesColor ) # explicit words, not predceeded and followed by any letter					
 
 				self.charCount += len(line) # Do this AFTER Applying the range. We count the Lines UP to the currently checked one and add this to the found start
 
