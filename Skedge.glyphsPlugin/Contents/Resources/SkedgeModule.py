@@ -191,7 +191,7 @@ class CodeEditor(NSResponder):
 		nsWindow = self.w.getNSWindow()
 		# nsWindow.setLevel_(NSFloatingWindowLevel)
 		# nsWindow.setCollectionBehavior_(NSWindowCollectionBehaviorManaged )
-		nsWindow.setStyleMask_(NSWindowStyleMaskFullSizeContentView | NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask)
+		nsWindow.setStyleMask_( NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask)
 		nsWindow.setAppearance_(NSAppearance.appearanceNamed_(NSAppearanceNameVibrantDark))
 		nsWindow.setTitlebarAppearsTransparent_(1)
 		nsWindow.setBackgroundColor_( editorBGColor )
