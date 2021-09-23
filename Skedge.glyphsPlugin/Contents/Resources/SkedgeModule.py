@@ -26,6 +26,7 @@ from AppKit import NSBezierPath,\
 	NSBackgroundColorAttributeName,\
 	NSForegroundColorAttributeName,\
 	NSMutableParagraphStyle,\
+	NSParagraphStyleAttributeName,\
 	NSNoBorder,\
 	NSFloatingWindowLevel,\
 	NSWindowStyleMaskFullSizeContentView,\
@@ -126,29 +127,57 @@ __METHOD__ = DRAWBACKGROUND # DRAWFOREGROUND
 # S Y N T A X   K E Y W O R D S
 #==============================
 
-keywordsWithSpace = [ # Space to the right.
-u"def ",
-u"class ",
-u"for ",
-u"while ",
-u"if ",
-u"elif ",
-u"else ",
-u"finally ",
-u"from ",
-u"print ",
-u"except ",
-u"global ",
-u"return ",
-u"as ",
-u"print ",
-u"import " ## ! KEEP u"import " at end of this list, otherwise some Keywords wont work !
+keywordsWithSpace = [
+	u"def ",
+	u"class ",
+	u"for ",
+	u"while ",
+	u"if ",
+	u"elif ",
+	u"else ",
+	u"finally ",
+	u"from ",
+	u"print ",
+	u"except ",
+	u"global ",
+	u"return ",
+	u"as ",
+	u"print ",
+	u"import " ## ! KEEP u"import " at end of this list, otherwise some Keywords wont work !
+] # Space to the right.
+keywordsWithSpaces = [
+	u" in ",
+	u" and ",
+	u" not ",
+	u" is ",
+	u" or ",
+	u" raise ",
+	u" yield ",
+] # Space to both sides.
+keywordsWithoutSpace = [
+	u"try:",
+	u"except:",
+	u"finally:",
+	u"else:",
+	u"\%s",
 ]
-keywordsWithSpaces = [u" in ", u" and ", u" not ", u" is ", u" or ", u" raise ",  u" yield ", ] # Space to both sides.
-keywordsWithoutSpace = [u"try:", u"except:", u"finally:", u"else:", u"\%s", ] # Period not implemented
-constants = [u"True", u"False", u"None", u"self", u"break", u"pass", u"return", u"continue", ]
+constants = [
+	u"True",
+	u"False",
+	u"None",
+	u"self",
+	u"break",
+	u"pass",
+	u"return",
+	u"continue",
+]
 commentTrigger = u"#"
-glyphsAppInternals = ["Glyphs", "GlyphsApp", "Font", "Layer"]
+glyphsAppInternals = [
+	"Glyphs",
+	"GlyphsApp",
+	"Font",
+	"Layer",
+]
 glyphsAppConstants = ["MOVE", "LINE", "CURVE", "OFFCURVE", "QCURVE", "HOBBYCURVE", "GSMOVE", "GSLINE", "GSCURVE", "GSQCURVE", "GSOFFCURVE", "GSHOBBYCURVE", "GSSHARP", "GSSMOOTH",
 	"FILL", "FILLCOLOR", "FILLPATTERNANGLE", "FILLPATTERNBLENDMODE", "FILLPATTERNFILE", "FILLPATTERNOFFSET", "FILLPATTERNSCALE", "STROKECOLOR", "STROKELINECAPEND", "STROKELINECAPSTART", "STROKELINEJOIN", "STROKEPOSITION", "STROKEWIDTH", "GRADIENT", "SHADOW", "INNERSHADOW", "MASK", 
 	"INSTANCETYPESINGLE", "INSTANCETYPEVARIABLE",
@@ -193,7 +222,7 @@ class CodeEditor(NSResponder):
 		# nsWindow.setCollectionBehavior_(NSWindowCollectionBehaviorManaged )
 		nsWindow.setStyleMask_( NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask)
 		nsWindow.setAppearance_(NSAppearance.appearanceNamed_(NSAppearanceNameVibrantDark))
-		nsWindow.setTitlebarAppearsTransparent_(1)
+		nsWindow.setTitlebarAppearsTransparent_( True )
 		nsWindow.setBackgroundColor_( editorBGColor )
 		
 		
@@ -227,6 +256,16 @@ class CodeEditor(NSResponder):
 		self.textView.setSmartInsertDeleteEnabled_( False )
 
 		self.textView.setMenu_( None )
+
+		#ta = self.textView.typingAttributes().mutableCopy()
+		#ps = NSMutableParagraphStyle.alloc().init()
+		#ps.setLineSpacing_(30.0)
+		#ps.setMinimumLineHeight_(30.0)
+		#ps.setMaximumLineHeight_(30.0)
+		#ps.setLineHeightMultiple_(3.0)
+		#ta.setObject_forKey_(ps, NSParagraphStyleAttributeName)
+		##self.textView.setDefaultParagraphStyle_(ps)
+		#print(self.textView.defaultParagraphStyle())
 
 
 		# Buttons
