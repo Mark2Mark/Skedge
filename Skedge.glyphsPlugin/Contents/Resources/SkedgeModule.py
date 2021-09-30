@@ -316,7 +316,7 @@ class CodeEditor(NSResponder):
 
 	def removeCallback(self):
 		try:
-			Glyphs.removeCallback(self.drawCode, __METHOD__)
+			Glyphs.removeCallback(self.drawCode, callbackType=__METHOD__)
 		except:
 			print(traceback.format_exc())
 
