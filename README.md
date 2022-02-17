@@ -38,7 +38,7 @@ A plugin which draws something to your active Edit Tab
 ---
 ### How to use
 
-- (Install once from the Plugin Manager in Glyphs.)
+- (If you haven’t yt, install once from the Plugin Manager in Glyphs.)
 - Open “Skedge” from the Window menu. It will present you a super simple sample code to begin with.
 - You can open and/or save your code for later. Just hit `Cmd+S` or `Cmd+O`.
 - Switch off the checkbox “Live”, if you don’t want to see changes in realtime.
@@ -47,6 +47,12 @@ A plugin which draws something to your active Edit Tab
 - `Cmd+P` lets you print your code or save it as PDF.
 - Python etiquette: please use `TABS`! I’m not trying to force you into [that endless battle](https://stackoverflow.com/questions/119562/tabs-versus-spaces-in-python-programming), I just didn’t prepare the tool to deal with `SPACES` yet. Bear with me. BTW: f*** spaces! :D
 - The code in “Skedge” can be almost exactly transferred into an actual reporter plugin. For this, don’t forget to build it as a `class` like the `glyphsReporter` do. You’ll have to instantiate and call it in your Skedge code, which you don’t have to do later in the Reporter Plugin.
+
+#### Reset to Default Code
+In case something goes wrong and you want Skedge to launch again with the default code, rather than your last state, run this once in GlyphApp’s Macro Panel:
+```py
+del(Glyphs.defaults["SkedgeCode"])
+```
 
 ---
 ### Help
