@@ -311,12 +311,14 @@ class CodeEditor(NSResponder):
 	def addCallback(self):
 		try:
 			Glyphs.addCallback(self.drawCode, __METHOD__)
+			Glyphs.addCallback(self.SkedgeMouseMoved, MOUSEMOVED)
 		except:
 			print(traceback.format_exc())
 
 	def removeCallback(self):
 		try:
 			Glyphs.removeCallback(self.drawCode, callbackType=__METHOD__)
+			Glyphs.removeCallback(self.SkedgeMouseMoved, callbackType=MOUSEMOVED)
 		except:
 			print(traceback.format_exc())
 
@@ -330,6 +332,20 @@ class CodeEditor(NSResponder):
 				## This is the actual Code Log
 				## TODO: pass into own log window.
 				self.skedgeLog() # print traceback.format_exc()
+	
+	@objc.python_method
+	def SkedgeMouseMoved(self, info):
+		'''
+		For subscribing to the mouseMoved event.
+		Use in a Skedge code like this:
+
+		@objc.python_method
+		def __SkedgeMouseMoved__(self, info):
+			print('SkedgeMouseMoved _______')
+
+		SkedgeMouseMoved = __SkedgeMouseMoved__(self, info)
+		'''
+		pass
 
 	def run_(self, sender):
 		self.code = self.w.textEditor.get()
