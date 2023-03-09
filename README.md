@@ -168,6 +168,34 @@ for path in layer.paths:
 	DrawCross(*[p for p in path.bounds])
 ```
 
+##### 03)
+```python
+#################################################
+# # Draw line @ half Cap Height
+#################################################
+
+from AppKit import NSColor, NSBezierPath
+scale = Glyphs.font.currentTab.scale
+layer = Glyphs.font.selectedLayers[0]
+ 
+def myColor(a, b, c, d):
+	c = NSColor.colorWithHue_saturation_brightness_alpha_(a, b, c, d)
+	return c
+
+def line(x1, y1, x2, y2, scale):
+	myPath = NSBezierPath.alloc().init()
+	myPath.moveTo_((x1, y1))
+	myPath.lineTo_((x2, y2))
+	NSColor.systemPurpleColor().colorWithAlphaComponent_(0.9).set()
+	myPath.setLineWidth_(.5/scale)
+	myPath.stroke()
+
+capHeight = layer.associatedFontMaster().capHeight
+width = layer.width
+
+line(0, capHeight/2, width, capHeight/2, scale)
+```
+
 ---
 ##### Important
 - Beta! Please backup your files. No guarantee for destroying your files.
