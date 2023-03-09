@@ -168,7 +168,7 @@ for path in layer.paths:
 	DrawCross(*[p for p in path.bounds])
 ```
 
-##### 03)
+##### 04)
 ```python
 #################################################
 # # Draw line @ half Cap Height
