@@ -196,6 +196,8 @@ width = layer.width
 line(0, capHeight/2, width, capHeight/2, scale)
 ```
 
+### Other Info
+
 ---
 ##### Important
 - Beta! Please backup your files. No guarantee for destroying your files.
