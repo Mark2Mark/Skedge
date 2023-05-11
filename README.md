@@ -205,11 +205,11 @@ line(0, capHeight/2, width, capHeight/2, scale)
 ---
 ##### Known Issues
 
-- Once a script was opened via cmd+o, the floating window is not such anymore, it will always go the the background now when you click into the Edit Tab.
-- Some people report a crash caused by scrolling in the Code Editor. I cannot reproduce yet, so I’ll need Console Logs.
+- ~~Once a script was opened via cmd+o, the floating window is not such anymore, it will always go the the background now when you click into the Edit Tab.~~
+- ~~Some people report a crash caused by scrolling in the Code Editor. I cannot reproduce yet, so I’ll need Console Logs.~~
 - ~~Some Plugins which add a DRAWBACKGROUND callback could interfere with this plugin and hence either or both fail to operate.~~ [Solved in Glyphs builds higher than around 1110]
-- Syntax Highlighting is yet very rudimentary. But waaay better than none.
-- Unfortunately It can fail to work in some environments. I witnessed one script executing fine on one computer and refusing to work on others without any tracebacks, error throws or console logs. Don’t panic and let me know. I’m happy to find the cause.
+- ~~Syntax Highlighting is yet very rudimentary. But waaay better than none.~~
+- ~~Unfortunately It can fail to work in some environments. I witnessed one script executing fine on one computer and refusing to work on others without any tracebacks, error throws or console logs. Don’t panic and let me know. I’m happy to find the cause.~~
 - ~~Copying code from certain sources can mess with the syntax highlighting. Maybe I got a severe setup issue with my self written syntax highlighting. Maybe `cmd`+`shift`-pasting helps.~~
 
 ---
@@ -220,7 +220,7 @@ line(0, capHeight/2, width, capHeight/2, scale)
 - [ ] Display change of file in Window Title (Completely different file handling).
 - [ ] Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later. (For instance calling some variables and functions `global`)
 - [ ] Provide more code snippets.
-- [ ] Sophisticated syntax highlighting.
+- [x] Sophisticated syntax highlighting.
 - [ ] Add license to Repo.
 
 ---
