@@ -45,7 +45,7 @@ A plugin which draws something to your active Edit Tab
 - If so, be sure to hit the “Run” button (or `Cmd+R` ) to run your code.
 - `Cmd+K` resets the drawing in your Edit Tab. The same happens when you close the window.
 - `Cmd+P` lets you print your code or save it as PDF.
-- Python etiquette: please use `TABS`! I’m not trying to force you into [that endless battle](https://stackoverflow.com/questions/119562/tabs-versus-spaces-in-python-programming), I just didn’t prepare the tool to deal with `SPACES` yet. Bear with me. BTW: f*** spaces! :D
+- Python etiquette: please use `TABS`! I’m not trying to force you into [that endless battle]([https://stackoverflow.com/questions/119562/tabs-versus-spaces-in-python-programming](https://stackoverflow.com/questions/120926/why-does-python-pep-8-strongly-recommend-spaces-over-tabs-for-indentation)), I just didn’t prepare the tool to deal with `SPACES` yet. Bear with me. BTW: f*** spaces! :D
 - The code in “Skedge” can be almost exactly transferred into an actual reporter plugin. For this, don’t forget to build it as a `class` like the `glyphsReporter` do. You’ll have to instantiate and call it in your Skedge code, which you don’t have to do later in the Reporter Plugin.
 
 #### Reset to Default Code
