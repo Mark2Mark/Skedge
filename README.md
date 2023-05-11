@@ -221,7 +221,7 @@ line(0, capHeight/2, width, capHeight/2, scale)
 - [ ] Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later. (For instance calling some variables and functions `global`)
 - [ ] Provide more code snippets.
 - [x] Sophisticated syntax highlighting.
-- [ ] Add license to Repo.
+- [x] Add license to Repo.
 
 ---
 ##### Pull Requests
