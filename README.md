@@ -199,44 +199,47 @@ width = layer.width
 line(0, capHeight/2, width, capHeight/2, scale)
 ```
 
-### Other Info
+## Other Info
 
----
-##### Important
-- Beta! Please backup your files. No guarantee for destroying your files.
-- Take care when doing transforms or things alike on your layer's bezierPath. Since it will actually address the real path, be sure to make a `.copy()` of your layer before proceeding with those. If you’re just reading data and drawing new objects from that data, you should be fine.
+### Quirks
+
+Due to how the plugin is designed, the code you write does not add global variables to the main python namespace as you might be used to. Hence, if you want to access a global variable inside of a method you define, either pass it into the method as a parameter, or add it with the `global` keyword inside the method. For example
+```python
+my_variable = 42
+
+def my_method():
+    global my_variable # <- See here.
+    ...
+```
+
+### Important
+
+> [!WARNING]
+> Skedge is in beta. Please backup your files. No guarantee for destroying your files.
+
+> [!WARNING]
+> Take care when doing transforms or things alike on your layer's bezierPath. Since it will actually address the real path, be sure to make a `.copy()` of your layer before proceeding with those.
+> If you’re just reading data and drawing new objects from that data, you should be fine.
 
 
----
-##### Known Issues
-
-- ~~Once a script was opened via cmd+o, the floating window is not such anymore, it will always go the the background now when you click into the Edit Tab.~~
-- ~~Some people report a crash caused by scrolling in the Code Editor. I cannot reproduce yet, so I’ll need Console Logs.~~
-- ~~Some Plugins which add a DRAWBACKGROUND callback could interfere with this plugin and hence either or both fail to operate.~~ [Solved in Glyphs builds higher than around 1110]
-- ~~Syntax Highlighting is yet very rudimentary. But waaay better than none.~~
-- ~~Unfortunately It can fail to work in some environments. I witnessed one script executing fine on one computer and refusing to work on others without any tracebacks, error throws or console logs. Don’t panic and let me know. I’m happy to find the cause.~~
-- ~~Copying code from certain sources can mess with the syntax highlighting. Maybe I got a severe setup issue with my self written syntax highlighting. Maybe `cmd`+`shift`-pasting helps.~~
-
----
-##### TODO
+## TODO
 
 - [x] Autosave text edits. Reopening Skedge now remembers your code. Thanks Georg!
 - [x] Fix encoding. Cannot save a file with words like »don’t«.
 - [ ] Display change of file in Window Title (Completely different file handling).
-- [ ] Skedge has some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later. (For instance calling some variables and functions `global`)
+- [ ] Work around some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later. (For instance calling some variables and functions `global`)
 - [ ] Provide more code snippets.
 - [x] Sophisticated syntax highlighting.
 - [x] Add license to Repo.
 
----
-##### Pull Requests
+
+## Pull Requests
 
 Feel free to comment or pull requests for any improvements.
 
----
-##### License
+## License
 
-Copyright 2017 [Mark Frömberg](http://www.markfromberg.com/) *@Mark2Mark*
+Copyright 2017–2024 [Mark Frömberg](https://www.markfromberg.com/) *@Mark2Mark*
 
 Made possible with the [Glyphs SDK](https://github.com/schriftgestalt/GlyphsSDK) by Georg Seifert [(@schriftgestalt)](https://github.com/schriftgestalt) and Rainer Erich Scheichelbauer [(@mekkablue)](https://github.com/mekkablue).
 Thanks to Georg Seifert [(@schriftgestalt)](https://github.com/schriftgestalt) for streamlining and helping to make this tool still work after a lot of recent API changes!
