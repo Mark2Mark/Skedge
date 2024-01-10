@@ -8,10 +8,11 @@
 
 ---
 
-👉 Have you ever wanted to make a <a name="myfootnote1">reporter<sup>1</sup></a> plugin for Glyphs, but the developer kit and the plugin file structure looks too intimidating to you?
-👉 Maybe you’re never willing to get your head around it and skip developing even though you have great ideas you’d love to just sketch out.
-👉 Or do you create plugins from time to time, but you’re annoyed that you have to restart Glyphs for every change? This can take a loooot of time, especially when the plugin is packed with formulas and algorithms that you need to get straight. I suck at math, hence my approach ist often the trial-and-error.
-👉 You want to see immediately which numbers and operators have which effect. You want to properly position your to be displayed components, maybe design them to provide an optimal user experience. Or choose the best colors for your graphics.
+- 👉 Have you ever wanted to **make a reporter[^1] plugin** for Glyphs, but the developer kit and the plugin file structure looks too intimidating to you?  
+- 👉 Maybe you’re never willing to get your head around it and skip developing even though you have great ideas **you’d love to just sketch out**.  
+- 👉 Or do you create plugins from time to time, but you’re annoyed that you have to restart Glyphs for every change? This can take a loooot of time, especially when the plugin is packed with formulas and algorithms that you need to get straight and test.
+- 👉 You want to **see immediately which numbers and operators have which effect**. You want to **properly position your to be displayed objects**, maybe design them to provide an optimal user experience. Or **find the best colors** for your graphics.  
+[^1]: A plugin which draws something to your active Edit Tab
 
 #### 🎉 *Well, wait no longer! “Skedge” let’s you do exactly this!* 🎉
 
@@ -23,10 +24,16 @@ Visual feedback in realtime is something that we designers always strive for.
 Hopefully “Skedge” will tear down the inhibition level for beginners and be a companion on the way to learn coding. The sense of achievement will make you happy.
 But this tool will help you anytime, no matter if you just started with python or if you’re an experienced developer already.
 
+## How does it work?
+
+In Skedge you just need to write the code that would go into any of the drawing callback methods of a reporter plugin.
+
+> [!NOTE]
+> The point of Skedge is to reduce all the overhead of a plugin and get to the barebone drawing procedure immediately.
+
 ...
 
-<sup>[1)](#myfootnote1)</sup>
-A plugin which draws something to your active Edit Tab
+
 
 ---
 ### Example
