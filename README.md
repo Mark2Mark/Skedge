@@ -4,9 +4,9 @@
 
 # Skedge
 
-<img src="https://img.shields.io/badge/version%20-1.2.7-red.svg"> <a href="https://glyphsapp.com/"><img src="https://img.shields.io/badge/environment%20-GlyphsApp-brightgreen.svg"></a> <img src="https://img.shields.io/badge/type%20-Plugin-blue.svg"> <img src="https://img.shields.io/badge/python%20-2.7-blue.svg"> <a href="http://ts-vanilla.readthedocs.io/en/latest/"> <img src="https://img.shields.io/badge/dependencies%20-Vanilla-lightgray.svg"></a> <a href="http://www.apache.org/licenses/LICENSE-2.0"> <img src="https://img.shields.io/badge/license%20-Apache 2.0-lightgray.svg"></a>
+<!-- <a href="https://glyphsapp.com/"><img src="https://img.shields.io/badge/environment%20-GlyphsApp-brightgreen.svg"></a> <img src="https://img.shields.io/badge/type%20-Plugin-blue.svg"> <a href="http://ts-vanilla.readthedocs.io/en/latest/"> <img src="https://img.shields.io/badge/dependencies%20-Vanilla-lightgray.svg"></a> <a href="http://www.apache.org/licenses/LICENSE-2.0"> <img src="https://img.shields.io/badge/license%20-Apache 2.0-lightgray.svg"></a> -->
 
----
+## What is it about?
 
 - 👉 Have you ever wanted to **make a reporter[^1] plugin** for Glyphs, but the developer kit and the plugin file structure looks too intimidating to you?  
 - 👉 Maybe you’re never willing to get your head around it and skip developing even though you have great ideas **you’d love to just sketch out**.  
@@ -16,12 +16,15 @@
 
 #### 🎉 *Well, wait no longer! “Skedge” let’s you do exactly this!* 🎉
 
-🤓 “Skedge” lets you focus on the essence of code you need in order to get your idea to the canvas. No file and folder overload. No extra code that you don’t understand the use for. No Glyphs restart for every change you make.
+🤓 “Skedge” lets you focus on the essence of code you need in order to get your idea to the canvas.
+- No GlyphsApp restart for every change you make.
+- No extra code that you don’t understand the use for.  
+- No file and folder overload.  
 
-“Skedge” is your playground, your tool to explore how to use python to build incredible anylitic tools for your workflow.
+**“Skedge” is your playground,** your tool to explore how to use python to build incredible tools for your type design workflow.
 Visual feedback in realtime is something that we designers always strive for.
 
-Hopefully “Skedge” will tear down the inhibition level for beginners and be a companion on the way to learn coding. The sense of achievement will make you happy.
+**“Skedge” tears down the inhibition level** for beginners and is a companion on the way to learn coding. The sense of achievement will make you happy.
 But this tool will help you anytime, no matter if you just started with python or if you’re an experienced developer already.
 
 ## How does it work?
@@ -31,19 +34,14 @@ In Skedge you just need to write the code that would go into any of the drawing 
 > [!NOTE]
 > The point of Skedge is to reduce all the overhead of a plugin and get to the barebone drawing procedure immediately.
 
-...
-
-
-
----
-### Example
+## Live Example
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/Mark2Mark/Skedge/master/Images/Skedge%2003.gif" alt="Skedge" height="">
 </p>
 
----
-### How to use
+
+## How to use
 
 - (If you haven’t yt, install once from the Plugin Manager in Glyphs.)
 - Open “Skedge” from the Window menu. It will present you a super simple sample code to begin with.
@@ -55,14 +53,13 @@ In Skedge you just need to write the code that would go into any of the drawing 
 - Python etiquette: please use `TABS`! I’m not trying to force you into [that endless battle](https://stackoverflow.com/questions/120926/why-does-python-pep-8-strongly-recommend-spaces-over-tabs-for-indentation), I just didn’t prepare the tool to deal with `SPACES` yet. Bear with me. BTW: f*** spaces! :D
 - The code in “Skedge” can be almost exactly transferred into an actual reporter plugin. For this, don’t forget to build it as a `class` like the `glyphsReporter` do. You’ll have to instantiate and call it in your Skedge code, which you don’t have to do later in the Reporter Plugin.
 
-#### Reset to Default Code
+## Reset to Default Code
 In case something goes wrong and you want Skedge to launch again with the default code, rather than your last state, run this once in GlyphApp’s Macro Panel:
 ```py
 del(Glyphs.defaults["SkedgeCode"])
 ```
 
----
-### Help
+## Help
 
 You find **help** and **code examples** here:
 
@@ -78,12 +75,11 @@ It’s also always possible to peek into public plugins:
 
 and other people who are endlessly kind to share their skills with the world. :)
 
----
-### Sample Codes
+## Sample Codes
 
 You can dump these snippets right into “Skedge” and they will (hopefully) just do what they claim to do:
 
-##### 01)
+### 01) Draw Layer Bounds
 ```python
 ###################
 # Draw Layer Bounds
@@ -102,7 +98,7 @@ rect = NSMakeRect(x, y, width, height)
 NSRectFill(rect)
 ```
 
-##### 02)
+### 02) Draw filled Path with red outline and highlight every second Node
 ```python
 ###################################################################
 # Draw filled Path with red outline and highlight every second Node
@@ -131,7 +127,7 @@ for path in layer.paths:
 			badge(node.x, node.y, 20/scale )
 ```
 
-##### 03)
+### 03) Draw plumblines at each path’s center (x and y)
 ```python
 #################################################
 # Draw plumblines at each path’s center (x and y)
@@ -175,10 +171,10 @@ for path in layer.paths:
 	DrawCross(*[p for p in path.bounds])
 ```
 
-##### 04)
+### 04) Draw line @ half Cap Height
 ```python
 #################################################
-# # Draw line @ half Cap Height
+# Draw line @ half Cap Height
 #################################################
 
 from AppKit import NSColor, NSBezierPath
