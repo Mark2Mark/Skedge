@@ -41,17 +41,22 @@ In Skedge you just need to write the code that would go into any of the drawing 
 </p>
 
 
-## How to use
+## Getting Started with Skedge
 
-- (If you haven’t yt, install once from the Plugin Manager in Glyphs.)
-- Open “Skedge” from the Window menu. It will present you a super simple sample code to begin with.
-- You can open and/or save your code for later. Just hit `Cmd+S` or `Cmd+O`.
-- Switch off the checkbox “Live”, if you don’t want to see changes in realtime.
-- If so, be sure to hit the “Run” button (or `Cmd+R` ) to run your code.
-- `Cmd+K` resets the drawing in your Edit Tab. The same happens when you close the window.
-- `Cmd+P` lets you print your code or save it as PDF.
-- Python etiquette: please use `TABS`! I’m not trying to force you into [that endless battle](https://stackoverflow.com/questions/120926/why-does-python-pep-8-strongly-recommend-spaces-over-tabs-for-indentation), I just didn’t prepare the tool to deal with `SPACES` yet. Bear with me. BTW: f*** spaces! :D
-- The code in “Skedge” can be almost exactly transferred into an actual reporter plugin. For this, don’t forget to build it as a `class` like the `glyphsReporter` do. You’ll have to instantiate and call it in your Skedge code, which you don’t have to do later in the Reporter Plugin.
+If you haven't already, install Skedge using Glyphs Plugin Manager.
+
+1. Open the "Skedge" plugin from the Window menu. It provides a simple sample code to help you get started quickly.
+1. Now write your own code instead of the sample code. Only the code that will go into your Reporter plugin’s drawing method is required.
+1. You will see the result in realtime in the GlyphsApp Edit View.
+1. Save and open your code by using <kbd>Cmd+S</kbd> for save and <kbd>Cmd+O</kbd> for open.
+1. Toggle the "Live" checkbox to preview changes in real-time. If not, click the "Run" button (or use <kbd>Cmd+R</kbd>) to execute your code.
+1. Press <kbd>Cmd+K</kbd> to reset the drawing in your Edit Tab. The same effect occurs when you close the Skedge window.
+1. Press <kbd>Cmd+P</kbd> to either print your code or save it as a PDF.
+1. Python etiquette: Please use **tabs**. While Skedge currently doesn't support spaces, future updates might address this. For now, let's stick with tabs. Learn more about the great spaces vs tabs debate.
+1. The code written in Skedge can be seamlessly transferred into an actual reporter plugin. Paste the Skedge code into your glyphsReporter’s drawing method.
+1. Skedge provides access to all GlyphsApp Python objects and Cocoa UI objects. Import them explicitly in your code, for example, `from AppKit import NSColor, NSRect`.
+
+
 
 ## Reset to Default Code
 In case something goes wrong and you want Skedge to launch again with the default code, rather than your last state, run this once in GlyphApp’s Macro Panel:
