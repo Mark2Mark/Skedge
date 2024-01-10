@@ -108,23 +108,23 @@ import traceback
 scale = Glyphs.font.currentTab.scale
 
 def badge(x, y, size):
-	myPath = NSBezierPath.alloc().init()
-	myRect = NSRect( ( x-size/2, y-size/2 ), ( size, size ) )
-	thisPath = NSBezierPath.bezierPathWithOvalInRect_( myRect )
-	myPath.appendBezierPath_( thisPath )
-	NSColor.colorWithCalibratedRed_green_blue_alpha_( 0.5, .5, 0.5, .3 ).set()
-	myPath.fill()
+    myPath = NSBezierPath.alloc().init()
+    myRect = NSRect( ( x-size/2, y-size/2 ), ( size, size ) )
+    thisPath = NSBezierPath.bezierPathWithOvalInRect_( myRect )
+    myPath.appendBezierPath_( thisPath )
+    NSColor.colorWithCalibratedRed_green_blue_alpha_( 0.5, .5, 0.5, .3 ).set()
+    myPath.fill()
 
 for path in layer.paths:
-	NSColor.grayColor().colorWithAlphaComponent_(0.3).set()
-	bp = path.bezierPath
-	bp.fill()
-	bp.setLineWidth_(5/scale)
-	NSColor.redColor().set()
-	bp.stroke()
-	for i, node in enumerate(path.nodes):
-		if i % 2:
-			badge(node.x, node.y, 20/scale )
+    NSColor.grayColor().colorWithAlphaComponent_(0.3).set()
+    bp = path.bezierPath
+    bp.fill()
+    bp.setLineWidth_(5/scale)
+    NSColor.redColor().set()
+    bp.stroke()
+    for i, node in enumerate(path.nodes):
+        if i % 2:
+            badge(node.x, node.y, 20/scale )
 ```
 
 ### 03) Draw plumblines at each path’s center (x and y)
@@ -142,33 +142,33 @@ NSColor.blueColor().set()
 
 
 def drawLine((x1, y1), (x2, y2)):
-	strokeWidth = 1/scale
-	path = NSBezierPath.bezierPath()
-	path.moveToPoint_((x1, y1))
-	path.lineToPoint_((x2, y2))
-	path.setLineWidth_(strokeWidth)
-	path.setLineDash_count_phase_((10, 2), 2, 0.0)
-	path.stroke()
+    strokeWidth = 1/scale
+    path = NSBezierPath.bezierPath()
+    path.moveToPoint_((x1, y1))
+    path.lineToPoint_((x2, y2))
+    path.setLineWidth_(strokeWidth)
+    path.setLineDash_count_phase_((10, 2), 2, 0.0)
+    path.stroke()
 
 def DrawCross((x, y), (width, height)):
-	### BOUNDS DIMENSIONS
-	xRight = x + width
-	yTop = y + height
-	xCenter = (x + width/2)
-	yCenter = (y + height/2)
+    ### BOUNDS DIMENSIONS
+    xRight = x + width
+    yTop = y + height
+    xCenter = (x + width/2)
+    yCenter = (y + height/2)
 
-	### LAYER/METRIC DIMENSIONS
-	left = 0
-	right = layer.width
-	ascender = layer.glyphMetrics()[1]
-	descender = layer.glyphMetrics()[3]
+    ### LAYER/METRIC DIMENSIONS
+    left = 0
+    right = layer.width
+    ascender = layer.glyphMetrics()[1]
+    descender = layer.glyphMetrics()[3]
 
-	drawLine((left, yCenter), (right, yCenter))
-	drawLine((xCenter, descender), (xCenter, ascender))
+    drawLine((left, yCenter), (right, yCenter))
+    drawLine((xCenter, descender), (xCenter, ascender))
 
 
 for path in layer.paths:
-	DrawCross(*[p for p in path.bounds])
+    DrawCross(*[p for p in path.bounds])
 ```
 
 ### 04) Draw line @ half Cap Height
@@ -182,16 +182,16 @@ scale = Glyphs.font.currentTab.scale
 layer = Glyphs.font.selectedLayers[0]
  
 def myColor(a, b, c, d):
-	c = NSColor.colorWithHue_saturation_brightness_alpha_(a, b, c, d)
-	return c
+    c = NSColor.colorWithHue_saturation_brightness_alpha_(a, b, c, d)
+    return c
 
 def line(x1, y1, x2, y2, scale):
-	myPath = NSBezierPath.alloc().init()
-	myPath.moveTo_((x1, y1))
-	myPath.lineTo_((x2, y2))
-	NSColor.systemPurpleColor().colorWithAlphaComponent_(0.9).set()
-	myPath.setLineWidth_(.5/scale)
-	myPath.stroke()
+    myPath = NSBezierPath.alloc().init()
+    myPath.moveTo_((x1, y1))
+    myPath.lineTo_((x2, y2))
+    NSColor.systemPurpleColor().colorWithAlphaComponent_(0.9).set()
+    myPath.setLineWidth_(.5/scale)
+    myPath.stroke()
 
 capHeight = layer.associatedFontMaster().capHeight
 width = layer.width
