@@ -31,8 +31,14 @@ class SkedgePlugin(GeneralPlugin):
 			targetMenu = WINDOW_MENU  # EDIT_MENU # SCRIPT_MENU
 			separator = NSMenuItem.separatorItem()
 			Glyphs.menu[targetMenu].append(separator)
-			s = objc.selector(self.skedge_, signature=b'v@:')
-			newMenuItem = NSMenuItem(self.name, s)
+
+			if Glyphs.buildNumber >= 3320:
+				from GlyphsApp.UI import MenuItem
+				newMenuItem = MenuItem(self.name, action=self.skedge_, target=self)
+			elif Glyphs.buildNumber >= 3.3:
+				newMenuItem = NSMenuItem(self.name, callback=self.skedge_, target=self)
+			else:
+				newMenuItem = NSMenuItem(self.name, self.skedge_)
 			Glyphs.menu[targetMenu].append(newMenuItem)
 		except:
 			NSLog(traceback.format_exc())
