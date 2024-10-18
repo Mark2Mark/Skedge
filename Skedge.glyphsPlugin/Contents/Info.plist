@@ -16,14 +16,8 @@
 	<string>1.2.9</string>
 	<key>CFBundleVersion</key>
 	<string>13</string>
-	<key>UpdateFeedURL</key>
-	<string>____OnlineUrlToThisPlist____</string>
-	<key>productPageURL</key>
-	<string>____ProductPageURL____</string>
-	<key>productReleaseNotes</key>
-	<string>Completely rewritten Syntax Highlighting</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright, Mark Frömberg, 2017</string>
+	<string>Copyright, Mark Frömberg, 2024</string>
 	<key>NSPrincipalClass</key>
 	<string>SkedgePlugin</string>
 </dict>
