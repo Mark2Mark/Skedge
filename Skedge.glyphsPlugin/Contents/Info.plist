@@ -13,9 +13,9 @@
 	<key>CFBundleName</key>
 	<string>Skedge</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.10</string>
+	<string>1.2.11</string>
 	<key>CFBundleVersion</key>
-	<string>14</string>
+	<string>15</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright, Mark Frömberg, 2024</string>
 	<key>NSPrincipalClass</key>
