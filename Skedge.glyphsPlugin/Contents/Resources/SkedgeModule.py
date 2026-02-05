@@ -26,10 +26,16 @@ from GlyphsApp import Glyphs, Message, GetOpenFile, GetSaveFile, DRAWBACKGROUND
 from vanilla import FloatingWindow, TextEditor, CheckBox, Button
 
 from Cocoa import (
+    NSAttributedString,
     NSColor,
     NSFont,
+    NSFontAttributeName,
+    NSForegroundColorAttributeName,
+    NSNotificationCenter,
     NSPrintOperation,
     NSResponder,
+    NSRectFill,
+    NSRulerView,
     NSFontWeightRegular,
     NSBackgroundColorAttributeName,
     NSNoBorder,
@@ -46,7 +52,7 @@ from Cocoa import (
 
 name = "Skedge"
 author = "Mark Frömberg"
-version = "1.2.10"
+version = "1.3.0"
 releaseDate = "2017-10-25"
 
 
@@ -281,6 +287,141 @@ glyphsAppCallbacks = [
     "CONTEXTMENUCALLBACK",
 ]
 
+# ============================
+# L I N E   N U M B E R S
+# ============================
+
+
+lineNumberColor = editorTextColor.colorWithAlphaComponent_(0.35)
+
+
+class LineNumberRulerView(NSRulerView):
+
+    def isFlipped(self):
+        return True
+
+    @objc.python_method
+    def setup(self, textView):
+        self._textView = textView
+        try:
+            self._font = NSFont.monospacedSystemFontOfSize_weight_(
+                codeEditorFontSize - 2, NSFontWeightRegular
+            )
+        except Exception:
+            self._font = NSFont.userFixedPitchFontOfSize_(codeEditorFontSize - 2)
+        self._attrs = {
+            NSForegroundColorAttributeName: lineNumberColor,
+            NSFontAttributeName: self._font,
+        }
+        self.setRuleThickness_(36)
+        scrollView = textView.enclosingScrollView()
+        scrollView.contentView().setPostsBoundsChangedNotifications_(True)
+        nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver_selector_name_object_(
+            self,
+            "refresh:",
+            "NSTextStorageDidProcessEditingNotification",
+            textView.textStorage(),
+        )
+        nc.addObserver_selector_name_object_(
+            self,
+            "refresh:",
+            "NSViewBoundsDidChangeNotification",
+            scrollView.contentView(),
+        )
+
+    def refresh_(self, notification):
+        self._updateThickness()
+        self.setNeedsDisplay_(True)
+
+    @objc.python_method
+    def _updateThickness(self):
+        text = self._textView.string()
+        lineCount = text.componentsSeparatedByString_("\n").count()
+        digits = max(2, len(str(lineCount)))
+        newThickness = digits * 8 + 20
+        if newThickness != self.ruleThickness():
+            self.setRuleThickness_(newThickness)
+
+    @objc.python_method
+    def cleanup(self):
+        NSNotificationCenter.defaultCenter().removeObserver_(self)
+
+    def drawHashMarksAndLabelsInRect_(self, rect):
+        editorBGColor.set()
+        NSRectFill(rect)
+
+        textView = self._textView
+        lm = textView.layoutManager()
+        text = textView.string()
+        textLen = text.length()
+        insetH = textView.textContainerInset().height
+        thickness = self.ruleThickness()
+        scrollY = self.scrollView().contentView().bounds().origin.y
+
+        if textLen == 0:
+            label = NSAttributedString.alloc().initWithString_attributes_(
+                "1", self._attrs
+            )
+            labelSize = label.size()
+            label.drawAtPoint_((thickness - labelSize.width - 8, insetH - scrollY))
+            return
+
+        lineNum = 1
+        idx = 0
+
+        while idx < textLen:
+            lineRange = text.lineRangeForRange_(NSMakeRange(idx, 0))
+            result = lm.glyphRangeForCharacterRange_actualCharacterRange_(
+                lineRange, None
+            )
+            glyphRange = result[0] if isinstance(result, tuple) else result
+            result = lm.lineFragmentRectForGlyphAtIndex_effectiveRange_(
+                glyphRange.location, None
+            )
+            lineRect = result[0] if isinstance(result, tuple) else result
+
+            y = lineRect.origin.y + insetH - scrollY
+            h = lineRect.size.height
+
+            if y > rect.origin.y + rect.size.height:
+                break
+
+            if y + h >= rect.origin.y:
+                label = NSAttributedString.alloc().initWithString_attributes_(
+                    str(lineNum), self._attrs
+                )
+                labelSize = label.size()
+                label.drawAtPoint_(
+                    (
+                        thickness - labelSize.width - 8,
+                        y + (h - labelSize.height) / 2,
+                    )
+                )
+
+            nextIdx = lineRange.location + lineRange.length
+            if nextIdx <= idx:
+                break
+            idx = nextIdx
+            lineNum += 1
+
+        # Extra line after trailing newline
+        extraRect = lm.extraLineFragmentRect()
+        if extraRect.size.height > 0:
+            y = extraRect.origin.y + insetH - scrollY
+            h = extraRect.size.height
+            label = NSAttributedString.alloc().initWithString_attributes_(
+                str(lineNum), self._attrs
+            )
+            labelSize = label.size()
+            label.drawAtPoint_(
+                (
+                    thickness - labelSize.width - 8,
+                    y + (h - labelSize.height) / 2,
+                )
+            )
+
+
 # ========
 # M A I N
 # ========
@@ -358,6 +499,18 @@ class CodeEditor(NSResponder):
         self.textView.setSmartInsertDeleteEnabled_(False)
 
         self.textView.setMenu_(None)
+
+        # Line numbers
+        scrollView = self.w.textEditor._nsObject
+        scrollView.setHasVerticalRuler_(True)
+        self._lineNumberView = (
+            LineNumberRulerView.alloc().initWithScrollView_orientation_(
+                scrollView, 1  # NSVerticalRuler
+            )
+        )
+        self._lineNumberView.setup(self.textView)
+        scrollView.setVerticalRulerView_(self._lineNumberView)
+        scrollView.setRulersVisible_(True)
 
         # ta = self.textView.typingAttributes().mutableCopy()
         # ps = NSMutableParagraphStyle.alloc().init()
@@ -444,6 +597,7 @@ class CodeEditor(NSResponder):
         Glyphs.redraw()
 
     def onClose_(self, sender):
+        self._lineNumberView.cleanup()
         self.removeCallback()
 
     def doLiveCodeMode_(self, sender):
