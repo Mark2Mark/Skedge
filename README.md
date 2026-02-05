@@ -5,7 +5,7 @@
 # Skedge
 
 <p align="center">
-<img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge%201.3.0.png?raw=true" alt="Skedge" height="300">
+<img src="https://github.com/Mark2Mark/Skedge/blob/master/Images/Skedge%201.3.0.png?raw=true" alt="Skedge" height="800">
 </p>
 
 <!-- <a href="https://glyphsapp.com/"><img src="https://img.shields.io/badge/environment%20-GlyphsApp-brightgreen.svg"></a> <img src="https://img.shields.io/badge/type%20-Plugin-blue.svg"> <a href="http://ts-vanilla.readthedocs.io/en/latest/"> <img src="https://img.shields.io/badge/dependencies%20-Vanilla-lightgray.svg"></a> <a href="http://www.apache.org/licenses/LICENSE-2.0"> <img src="https://img.shields.io/badge/license%20-Apache 2.0-lightgray.svg"></a> -->
