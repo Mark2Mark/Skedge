@@ -22,8 +22,9 @@
 
 🤓 “Skedge” lets you focus on the essence of code you need in order to get your idea to the canvas.
 - No GlyphsApp restart for every change you make.
-- No extra code that you don’t understand the use for.  
-- No file and folder overload.  
+- No extra code that you don't understand the use for.
+- No file and folder overload.
+- Line numbers in the editor gutter for easy navigation.
 
 **“Skedge” is your playground,** your tool to explore how to use python to build incredible tools for your type design workflow.
 Visual feedback in realtime is something that we designers always strive for.
@@ -143,8 +144,6 @@ for path in layer.paths:
 #################################################
 import traceback
 
-global layer, scale, drawLine ## Skedge-Hack
-
 scale = Glyphs.font.currentTab.scale
 layer = Glyphs.font.selectedLayers[0]
 NSColor.blueColor().set()
@@ -210,17 +209,6 @@ line(0, capHeight/2, width, capHeight/2, scale)
 
 ## Other Info
 
-### Quirks
-
-Due to how the plugin is designed, the code you write does not add global variables to the main python namespace as you might be used to. Hence, if you want to access a global variable inside of a method you define, either pass it into the method as a parameter, or add it with the `global` keyword inside the method. For example
-```python
-my_variable = 42
-
-def my_method():
-    global my_variable # <- See here.
-    ...
-```
-
 ### Important
 
 > [!WARNING]
@@ -237,7 +225,7 @@ Feel free to comment or pull requests for any improvements.
 
 ## License
 
-Copyright 2017–2024 [Mark Frömberg](https://www.markfromberg.com/) *@Mark2Mark*
+Copyright 2017–2026 [Mark Frömberg](https://www.markfromberg.com/) *@Mark2Mark*
 
 Made possible with the [Glyphs SDK](https://github.com/schriftgestalt/GlyphsSDK) by Georg Seifert [(@schriftgestalt)](https://github.com/schriftgestalt) and Rainer Erich Scheichelbauer [(@mekkablue)](https://github.com/mekkablue).
 Thanks to Georg Seifert [(@schriftgestalt)](https://github.com/schriftgestalt) for streamlining and helping to make this tool still work after a lot of recent API changes!
