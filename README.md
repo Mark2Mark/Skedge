@@ -231,17 +231,6 @@ def my_method():
 > If you’re just reading data and drawing new objects from that data, you should be fine.
 
 
-## TODO
-
-- [x] Autosave text edits. Reopening Skedge now remembers your code. Thanks Georg!
-- [x] Fix encoding. Cannot save a file with words like »don’t«.
-- [ ] Display change of file in Window Title (Completely different file handling).
-- [ ] Work around some peculiar quirks that don’t need to be transferred to the actual reporterPlugin code later. (For instance calling some variables and functions `global`)
-- [ ] Provide more code snippets.
-- [x] Sophisticated syntax highlighting.
-- [x] Add license to Repo.
-
-
 ## Pull Requests
 
 Feel free to comment or pull requests for any improvements.
