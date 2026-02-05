@@ -52,7 +52,7 @@ from Cocoa import (
 
 name = "Skedge"
 author = "Mark Frömberg"
-version = "1.3.0"
+version = "1.4.0"
 releaseDate = "2017-10-25"
 
 
@@ -580,7 +580,10 @@ class CodeEditor(NSResponder):
     def drawCode(self, layer, info):
         if self.code is not None:
             try:
-                exec(self.code)
+                namespace = dict(globals())
+                namespace["layer"] = layer
+                namespace["info"] = info
+                exec(self.code, namespace)
                 # Glyphs.clearLog() # Maybe better not.
             except:
                 ## This is the actual Code Log
